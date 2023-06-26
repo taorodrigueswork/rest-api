@@ -12,7 +12,7 @@ namespace Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "People",
+                name: "Person",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -23,11 +23,11 @@ namespace Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_People", x => x.Id);
+                    table.PrimaryKey("PK_Person", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Schedules",
+                name: "Schedule",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -37,11 +37,11 @@ namespace Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Schedules", x => x.Id);
+                    table.PrimaryKey("PK_Schedule", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Days",
+                name: "Day",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -51,11 +51,11 @@ namespace Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Days", x => x.Id);
+                    table.PrimaryKey("PK_Day", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Days_Schedules_ScheduleId",
+                        name: "FK_Day_Schedule_ScheduleId",
                         column: x => x.ScheduleId,
-                        principalTable: "Schedules",
+                        principalTable: "Schedule",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -71,28 +71,28 @@ namespace Persistence.Migrations
                 {
                     table.PrimaryKey("PK_DayPerson", x => new { x.DayId, x.PersonId });
                     table.ForeignKey(
-                        name: "FK_DayPerson_Days_DayId",
+                        name: "FK_DayPerson_Day_DayId",
                         column: x => x.DayId,
-                        principalTable: "Days",
+                        principalTable: "Day",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DayPerson_People_PersonId",
+                        name: "FK_DayPerson_Person_PersonId",
                         column: x => x.PersonId,
-                        principalTable: "People",
+                        principalTable: "Person",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Day_ScheduleId",
+                table: "Day",
+                column: "ScheduleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DayPerson_PersonId",
                 table: "DayPerson",
                 column: "PersonId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Days_ScheduleId",
-                table: "Days",
-                column: "ScheduleId");
         }
 
         /// <inheritdoc />
@@ -102,13 +102,13 @@ namespace Persistence.Migrations
                 name: "DayPerson");
 
             migrationBuilder.DropTable(
-                name: "Days");
+                name: "Day");
 
             migrationBuilder.DropTable(
-                name: "People");
+                name: "Person");
 
             migrationBuilder.DropTable(
-                name: "Schedules");
+                name: "Schedule");
         }
     }
 }

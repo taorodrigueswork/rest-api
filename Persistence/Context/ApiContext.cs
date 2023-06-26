@@ -18,6 +18,8 @@ public class ApiContext : DbContext
     {
         modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
 
+        // Configuring many-to-many relationship between Day and Person using explicit class DayPersonEntity
+        // check this link for more information: https://docs.microsoft.com/en-us/ef/core/modeling/relationships#many-to-many
         modelBuilder.Entity<DayEntity>()
             .HasMany(n => n.People)
             .WithMany(n => n.Days)
@@ -31,7 +33,7 @@ public class ApiContext : DbContext
         //optionsBuilder.UseChangeTrackingProxies(false, false);
     }
 
-    public DbSet<PersonEntity>? People { get; set; }
-    public DbSet<DayEntity>? Days { get; set; }
-    public DbSet<ScheduleEntity>? Schedules { get; set; }
+    public DbSet<PersonEntity>? Person { get; set; }
+    public DbSet<DayEntity>? Day { get; set; }
+    public DbSet<ScheduleEntity>? Schedule { get; set; }
 }

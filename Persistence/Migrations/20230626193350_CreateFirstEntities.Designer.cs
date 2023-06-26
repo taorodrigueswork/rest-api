@@ -12,7 +12,7 @@ using Persistence.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20230626192620_CreateFirstEntities")]
+    [Migration("20230626193350_CreateFirstEntities")]
     partial class CreateFirstEntities
     {
         /// <inheritdoc />
@@ -43,7 +43,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("ScheduleId");
 
-                    b.ToTable("Days");
+                    b.ToTable("Day");
                 });
 
             modelBuilder.Entity("Persistence.Entities.DayPersonEntity", b =>
@@ -83,7 +83,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("People");
+                    b.ToTable("Person");
                 });
 
             modelBuilder.Entity("Persistence.Entities.ScheduleEntity", b =>
@@ -103,7 +103,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Schedules");
+                    b.ToTable("Schedule");
                 });
 
             modelBuilder.Entity("Persistence.Entities.DayEntity", b =>
