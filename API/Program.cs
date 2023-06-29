@@ -44,16 +44,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-//UpdateDatabase();
-
-static void UpdateDatabase(IApplicationBuilder app)
-{
-    using (var serviceScope = app.ApplicationServices
-               .GetRequiredService<IServiceScopeFactory>()
-               .CreateScope())
-    {
-        var context = serviceScope.ServiceProvider.GetService<ApiContext>();
-        //context?.Database.Migrate();
-    }
-}
