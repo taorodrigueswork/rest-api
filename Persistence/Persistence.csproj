@@ -23,4 +23,8 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Model\Entities.csproj" />
+  </ItemGroup>
+
 </Project>

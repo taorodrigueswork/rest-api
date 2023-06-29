@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
-namespace Persistence.Entities;
+namespace Entities.Entity;
 
 [ExcludeFromCodeCoverage]
 public class BaseEntity

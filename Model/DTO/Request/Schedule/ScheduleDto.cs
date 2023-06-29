@@ -2,8 +2,8 @@
 
 namespace Entities.DTO.Request.Schedule;
 
-internal class ScheduleDto
+internal class ScheduleDTO
 {
     public required string Name { get; init; }
-    public required List<DayDto> Days { get; init; }
+    public required List<DayDTO> Days { get; init; }
 }

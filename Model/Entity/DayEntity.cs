@@ -1,8 +1,10 @@
+using Entities.Entity;
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Persistence.Entities;
+namespace Entities.Entity;
 
 [ExcludeFromCodeCoverage]
 public class DayEntity : BaseEntity

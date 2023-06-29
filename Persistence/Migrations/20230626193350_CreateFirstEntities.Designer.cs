@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Persistence.Context;
+using Entities.Context;
 
 #nullable disable
 
-namespace Persistence.Migrations
+namespace Entities.Migrations
 {
     [DbContext(typeof(ApiContext))]
     [Migration("20230626193350_CreateFirstEntities")]

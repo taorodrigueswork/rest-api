@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Persistence.Entities;
+namespace Entities.Entity;
 
 /// <summary>
 /// Create a new table for the many-to-many relationship between Day and Person.
