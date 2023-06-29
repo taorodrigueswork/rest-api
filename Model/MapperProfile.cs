@@ -8,7 +8,6 @@ using Entities.Entity;
 namespace Entities;
 public class AutoMapperProfile : Profile
 {
-    
     public AutoMapperProfile()
     {
         //AllowNullCollections = true;

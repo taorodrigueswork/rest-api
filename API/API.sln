@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "..\Model\Entiti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities.Test", "..\Entities.Test\Entities.Test.csproj", "{534ABD7D-1589-45BE-A80D-B42DE3A38B76}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business.Test", "..\Business.Test\Business.Test.csproj", "{091539BB-8B3B-4DFC-B3A6-3A01B0C3D628}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{534ABD7D-1589-45BE-A80D-B42DE3A38B76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{534ABD7D-1589-45BE-A80D-B42DE3A38B76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{534ABD7D-1589-45BE-A80D-B42DE3A38B76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{091539BB-8B3B-4DFC-B3A6-3A01B0C3D628}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{091539BB-8B3B-4DFC-B3A6-3A01B0C3D628}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{091539BB-8B3B-4DFC-B3A6-3A01B0C3D628}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{091539BB-8B3B-4DFC-B3A6-3A01B0C3D628}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

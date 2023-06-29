@@ -1,6 +1,6 @@
 ﻿namespace Entities.DTO.Request.Person;
 
-internal class PersonDTO
+public class PersonDTO
 {
     public required string Name { get; init; }
     public required string Phone { get; init; }
