@@ -1,47 +1,92 @@
-using Microsoft.EntityFrameworkCore;
 using Entities.Context;
+using Microsoft.EntityFrameworkCore;
+using Serilog;
+using Serilog.Sinks.Elasticsearch;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-// Connect to the database
-var connectionString = builder.Configuration.GetConnectionString("SqlServer");
-
-builder.Services.AddDbContext<ApiContext>(options =>
-{
-    options.UseSqlServer(connectionString).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-});
+// Using this as reference to split the configuration in multiple functions
+// https://andrewlock.net/exploring-dotnet-6-part-12-upgrading-a-dotnet-5-startup-based-app-to-dotnet-6/
+ConfigureConfiguration(builder.Configuration);
+ConfigureServices(builder.Services);
 
 var app = builder.Build();
 
-// Migrate latest database changes during startup
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider
-        .GetRequiredService<ApiContext>();
-
-    // Here is the migration executed
-    dbContext.Database.Migrate();
-}
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
+ConfigureMiddleware(app);
+ConfigureEndpoints(app);
 
 app.Run();
+
+
+void ConfigureConfiguration(ConfigurationManager configuration)
+{
+    // Add Serilog to the application
+    // https://www.youtube.com/watch?v=0acSdHJfk64
+    // https://dotnetintellect.com/2020/09/06/logging-with-elasticsearch-kibana-serilog-using-asp-net-core-docker/
+    Log.Logger = new LoggerConfiguration()
+        .Enrich.FromLogContext()
+        .Enrich.WithMachineName()
+        .WriteTo.Console()
+        .WriteTo.Debug()
+        .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(builder.Configuration["ElasticConfiguration:Uri"]))
+        {
+            IndexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name!.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}",
+            AutoRegisterTemplate = true
+        })
+        .Enrich.WithProperty("Environment", builder.Environment.EnvironmentName)
+        .ReadFrom.Configuration(builder.Configuration)
+        .CreateLogger();
+
+    builder.Host.UseSerilog(Log.Logger);
+}
+
+// Register your services/dependencies 
+void ConfigureServices(IServiceCollection services)
+{
+    // Add services to the container.
+
+    builder.Services.AddControllers();
+    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+    // Connect to the database
+    var connectionString = builder.Configuration.GetConnectionString("SqlServer");
+
+    builder.Services.AddDbContext<ApiContext>(options =>
+    {
+        options.UseSqlServer(connectionString)
+               .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+    });
+}
+
+void ConfigureMiddleware(WebApplication app)
+{
+    // Migrate latest database changes during startup
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbContext = scope.ServiceProvider
+            .GetRequiredService<ApiContext>();
+
+        // Here is the migration executed
+        dbContext.Database.Migrate();
+    }
+
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+
+    app.UseHttpsRedirection();
+
+    app.UseAuthorization();
+
+    app.MapControllers();
+}
+
+void ConfigureEndpoints(IEndpointRouteBuilder app) { }
+

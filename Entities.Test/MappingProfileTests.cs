@@ -1,7 +1,5 @@
 using AutoMapper;
 
-using Entities;
-
 namespace Entities.Test;
 
 [TestClass]
