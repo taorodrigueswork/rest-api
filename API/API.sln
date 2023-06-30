@@ -11,9 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "..\Persisten
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "..\Model\Entities.csproj", "{1CAE1517-DAFE-4BC3-AFBB-107113DA48C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities.Test", "..\Entities.Test\Entities.Test.csproj", "{534ABD7D-1589-45BE-A80D-B42DE3A38B76}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities.Test", "..\Entities.Test\Entities.Test.csproj", "{534ABD7D-1589-45BE-A80D-B42DE3A38B76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business.Test", "..\Business.Test\Business.Test.csproj", "{091539BB-8B3B-4DFC-B3A6-3A01B0C3D628}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business.Test", "..\Business.Test\Business.Test.csproj", "{091539BB-8B3B-4DFC-B3A6-3A01B0C3D628}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
