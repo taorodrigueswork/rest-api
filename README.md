@@ -13,6 +13,8 @@ To get started, clone this repository and run the application using Visual Studi
   - `DTO`: This folder contains the data transfer objects (DTOs) used for request and response payloads.
   - `Entity`: This folder contains the database entities. There is a many-to-many relationship example with an explicit class to handle it. There is also a BaseEntity class with a generic validate method for the entities.
   - `MapperProfile`: This file contains the AutoMapper mappings between DTOs and entity models.
+- `Entities.Test`: This folder contains the entity tests using MSTest.
+  - `MappingProfileTests`: It tests if all the properties are mapped correctly. Not a single property should be ignored. Helps to avoid mistakes when mapping entities and DTOs.
 - `Persistency`: This folder contains the data access layer components, using Entity Framework Core ORM.
   - `Context`: It has an ApiContext that inherits from DbContext, which is a class provided by Entity Framework Core that represents a session with the database and allows you to query and save instances of your entity classes.
   - `Migrations`: Contain all migration files defining the changes to the model that should be applied to the database.
