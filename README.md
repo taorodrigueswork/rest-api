@@ -1,4 +1,4 @@
-# REST API TEMPLATE .NET 7 
+# REST API TEMPLATE WEB API .NET CORE 7 
 
 This is a template for building RESTful APIs using .NET 7. It includes a basic project structure and some common components such as logging, and database connectivity. 
 
