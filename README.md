@@ -21,6 +21,10 @@ This project requires the following technologies:
 - Global Error Middleware
 - Repository Pattern
 - OAuth
+- Coverlet
+- Docker File
+- AKS
+- AKV
   
 
 ## Project Structure
