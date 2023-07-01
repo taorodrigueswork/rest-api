@@ -5,11 +5,11 @@ using System.Linq.Expressions;
 namespace Persistence.Repository.GenericRepository;
 
 
-public abstract class GenericRepository<T> : IGenericRepository<T> where T : class, new()
+public class GenericRepository<T> : IGenericRepository<T> where T : class, new()
 {
     public readonly DbContext Context;
 
-    protected GenericRepository(DbContext dbContext)
+    public GenericRepository(DbContext dbContext)
     {
         Context = dbContext;
     }
@@ -28,12 +28,7 @@ public abstract class GenericRepository<T> : IGenericRepository<T> where T : cla
     {
         var entity = await Context.Set<T>().FindAsync(primaryKey);
 
-        if (entity != null)
-        {
-            return entity;
-        }
-
-        return new T();
+        return entity;
     }
 
     public async Task<T> FindAsync(Expression<Func<T, bool>> whereClause)

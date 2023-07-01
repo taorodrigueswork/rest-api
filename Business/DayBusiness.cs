@@ -17,17 +17,22 @@ public class DayBusiness : IBusiness<DayDTO, DayEntity>
         _repository = repository;
     }
 
-    public DayEntity Add(DayDTO entity)
+    public Task<DayEntity> Add(DayDTO entity)
     {
         throw new NotImplementedException();
     }
 
-    public void Delete(int id)
+    public Task<DayEntity> Delete(int id)
     {
         throw new NotImplementedException();
     }
 
-    public DayEntity Update(DayDTO entity)
+    public Task<DayEntity> GetById(int id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<DayEntity> Update(int id, DayDTO entity)
     {
         throw new NotImplementedException();
     }

@@ -16,26 +16,54 @@ public class PersonBusiness : IBusiness<PersonDTO, PersonEntity>
         _repository = repository;
     }
 
-    public PersonEntity Add(PersonDTO entity)
+    public async Task<PersonEntity> Add(PersonDTO personDTO)
     {
-        var person = _mapper.Map<PersonEntity>(entity);
+        var person = _mapper.Map<PersonEntity>(personDTO);
+
+        await _repository.InsertAsync(person);
 
         _logger.LogInformation($"Added person with name {person.Name} and ID {person.Id}");
 
         return person;
     }
 
-    public void Delete(int id)
+    public async Task<PersonEntity> Delete(int id)
     {
-        _logger.LogInformation("Log message generated with INFORMATION severity level.");
-        _logger.LogWarning("Log message generated with WARNING severity level.");
-        _logger.LogError("Log message generated with ERROR severity level.");
-        _logger.LogCritical("Log message log generated with CRITICAL severity level.");
+        var person = await _repository.FindByIdAsync(id);
+
+        if (person != null)
+        {
+            _logger.LogInformation($"Deleted person.", person);
+            await _repository.DeleteAsync(person);
+        }
+
+        _logger.LogWarning($"The person with id {id} was not found.");
+        return person;
     }
 
-
-    public PersonEntity Update(PersonDTO entity)
+    public async Task<PersonEntity> GetById(int id)
     {
-        throw new NotImplementedException();
+        return await _repository.FindByIdAsync(id);
+    }
+
+    public async Task<PersonEntity> Update(int personId, PersonDTO personDTO)
+    {
+        var person = await _repository.FindByIdAsync(personId);
+
+        if (person == null)
+        {
+            _logger.LogWarning($"The person with id {personId} was not found.");
+            return person;
+        }
+
+        // Update person properties from DTO
+        person = _mapper.Map<PersonEntity>(personDTO);
+        person.Id = personId;
+
+        await _repository.UpdateAsync(person);
+
+        _logger.LogInformation($"Updated person with name {person.Name} and ID {person.Id}", person);
+
+        return person;
     }
 }

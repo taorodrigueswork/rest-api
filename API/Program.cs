@@ -1,6 +1,8 @@
 using Business;
 using Business.Interfaces;
+using Entities.DTO.Request.Day;
 using Entities.DTO.Request.Person;
+using Entities.DTO.Request.Schedule;
 using Entities.Entity;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
@@ -14,8 +16,6 @@ Log.Logger = new LoggerConfiguration()
 
 try
 {
-
-
     var builder = WebApplication.CreateBuilder(args);
 
     // Using this as reference to split the configuration in multiple functions
@@ -65,8 +65,11 @@ try
     void ConfigureServices(IServiceCollection services)
     {
         // Add services to the container.
+        services.AddScoped<DbContext, ApiContext>();
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped<IBusiness<PersonDTO, PersonEntity>, PersonBusiness>();
+        services.AddScoped<IBusiness<DayDTO, DayEntity>, DayBusiness>();
+        services.AddScoped<IBusiness<ScheduleDTO, ScheduleEntity>, ScheduleBusiness>();
 
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -101,6 +104,7 @@ try
         {
             app.UseSwagger();
             app.UseSwaggerUI();
+            app.UseDeveloperExceptionPage();
         }
 
         app.UseHttpsRedirection();

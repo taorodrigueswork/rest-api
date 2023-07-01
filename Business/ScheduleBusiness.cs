@@ -18,17 +18,22 @@ public class ScheduleBusiness : IBusiness<ScheduleDTO, ScheduleEntity>
         _repository = repository;
     }
 
-    public ScheduleEntity Add(ScheduleDTO entity)
+    public Task<ScheduleEntity> Add(ScheduleDTO entity)
     {
         throw new NotImplementedException();
     }
 
-    public void Delete(int id)
+    public Task<ScheduleEntity> Delete(int id)
     {
         throw new NotImplementedException();
     }
 
-    public ScheduleEntity Update(ScheduleDTO entity)
+    public Task<ScheduleEntity> GetById(int id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<ScheduleEntity> Update(int id, ScheduleDTO entity)
     {
         throw new NotImplementedException();
     }

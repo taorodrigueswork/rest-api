@@ -4,6 +4,7 @@ using Entities.DTO.Request.Person;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Persistence.Interfaces;
+using System.Threading.Tasks;
 
 [TestClass()]
 public class PersonBusinessTests
@@ -27,7 +28,7 @@ public class PersonBusinessTests
 
 
     [TestMethod()]
-    public void Add_WithValidPersonDTO_ReturnsPersonEntity()
+    public async Task Add_WithValidPersonDTO_ReturnsPersonEntityAsync()
     {
         // Arrange
         var expectedPerson = new PersonEntity
@@ -44,7 +45,7 @@ public class PersonBusinessTests
         };
 
         // Act
-        var actualResult = _personBusiness.Add(personDTO);
+        var actualResult = await _personBusiness.Add(personDTO);
 
         // Assert
         Assert.IsNotNull(actualResult);
@@ -60,7 +61,7 @@ public class PersonBusinessTests
         var id = 1;
 
         // Act & Assert
-        Assert.ThrowsException<NotImplementedException>(() => _personBusiness.Delete(id));
+        Assert.ThrowsException<NotImplementedException>(async () => await _personBusiness.Delete(id));
     }
 
     [TestMethod()]
@@ -75,6 +76,6 @@ public class PersonBusinessTests
         };
 
         // Act & Assert
-        Assert.ThrowsException<NotImplementedException>(() => _personBusiness.Update(personDto));
+        Assert.ThrowsException<NotImplementedException>(async () => await _personBusiness.Update(1, personDto));
     }
 }
