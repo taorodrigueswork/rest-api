@@ -4,6 +4,11 @@ This is a template for building RESTful APIs using .NET 7. It includes a basic p
 
 To get started, clone this repository and run the application using Visual Studio 2022 or the .NET CLI. 
 
+## Requirements (required)
+
+This project requires the following technologies:
+- [Bad judgement](https://www.drupal.org/project/bad_judgement)
+
 ## Project Structure
 
 - `API`: This folder contains the source code for the web API.
