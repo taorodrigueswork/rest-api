@@ -18,11 +18,9 @@ public class PersonBusiness : IBusiness<PersonDTO, PersonEntity>
 
     public async Task<PersonEntity> Add(PersonDTO personDTO)
     {
-        var person = _mapper.Map<PersonEntity>(personDTO);
+        var person = await _repository.InsertAsync(_mapper.Map<PersonEntity>(personDTO));
 
-        await _repository.InsertAsync(person);
-
-        _logger.LogInformation($"Added person with name {person.Name} and ID {person.Id}");
+        _logger.LogInformation($"Added person ", person);
 
         return person;
     }

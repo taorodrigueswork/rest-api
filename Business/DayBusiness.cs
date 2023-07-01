@@ -17,19 +17,32 @@ public class DayBusiness : IBusiness<DayDTO, DayEntity>
         _repository = repository;
     }
 
-    public Task<DayEntity> Add(DayDTO entity)
+    public async Task<DayEntity> Add(DayDTO entity)
     {
-        throw new NotImplementedException();
+        var day = await _repository.InsertAsync(_mapper.Map<DayEntity>(entity));
+
+        _logger.LogInformation($"Added day ", entity);
+
+        return day;
     }
 
-    public Task<DayEntity> Delete(int id)
+    public async Task<DayEntity> Delete(int id)
     {
-        throw new NotImplementedException();
+        var day = await _repository.FindByIdAsync(id);
+
+        if (day != null)
+        {
+            _logger.LogInformation($"Deleted day.", day);
+            await _repository.DeleteAsync(day);
+        }
+
+        _logger.LogWarning($"The day with id {id} was not found.");
+        return day;
     }
 
-    public Task<DayEntity> GetById(int id)
+    public async Task<DayEntity> GetById(int id)
     {
-        throw new NotImplementedException();
+        return await _repository.FindByIdAsync(id);
     }
 
     public Task<DayEntity> Update(int id, DayDTO entity)

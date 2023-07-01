@@ -42,6 +42,8 @@ public class PersonController : ControllerBase
     /// <returns>An IActionResult representing the status of the operation with the details of the new entity created.</returns>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(PersonEntity))]
+    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+    [ServiceFilter(typeof(ValidationFilterAttribute))]
     public async Task<IActionResult> AddPersonAsync([FromBody] PersonDTO personDTO)
     {
         return personDTO == null ? BadRequest("Person cannot be null") : Created(string.Empty, await _personBusiness.Add(personDTO));
@@ -56,6 +58,7 @@ public class PersonController : ControllerBase
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PersonEntity))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public async Task<IActionResult> UpdatePersonAsync([FromHeader] int personId, [FromBody] PersonDTO personDTO)
     {
         var updatedPerson = await _personBusiness.Update(personId, personDTO);

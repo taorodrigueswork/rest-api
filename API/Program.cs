@@ -1,14 +1,17 @@
+using API;
 using Business;
 using Business.Interfaces;
 using Entities.DTO.Request.Day;
 using Entities.DTO.Request.Person;
 using Entities.DTO.Request.Schedule;
 using Entities.Entity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
 using Persistence.Interfaces;
 using Persistence.Repository.GenericRepository;
 using Serilog;
+using System.Text.Json.Serialization;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -64,6 +67,11 @@ try
     // Register your services/dependencies 
     void ConfigureServices(IServiceCollection services)
     {
+        builder.Services.AddControllers().AddJsonOptions(options =>
+        {   // avoid circular references when returning JSON in the API
+            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        });
+
         // Add services to the container.
         services.AddScoped<DbContext, ApiContext>();
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -71,7 +79,11 @@ try
         services.AddScoped<IBusiness<DayDTO, DayEntity>, DayBusiness>();
         services.AddScoped<IBusiness<ScheduleDTO, ScheduleEntity>, ScheduleBusiness>();
 
-        builder.Services.AddControllers();
+        // Invoking action filters to validate the model state for all entities received in POST and PUT requests
+        // https://code-maze.com/aspnetcore-modelstate-validation-web-api/
+        services.AddScoped<ValidationFilterAttribute>();
+        services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
+
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
