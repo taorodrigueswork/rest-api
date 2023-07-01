@@ -7,7 +7,21 @@ To get started, clone this repository and run the application using Visual Studi
 ## Requirements (required)
 
 This project requires the following technologies:
-- [Bad judgement](https://www.drupal.org/project/bad_judgement)
+- .NET 7
+- C#
+- SQL Server
+- Entity Framework Core 7
+- Serilog
+- Seq or Elastic Search
+- Automapper
+- MSTest
+- Swagger
+
+## Future Implementations
+- Global Error Middleware
+- Repository Pattern
+- OAuth
+  
 
 ## Project Structure
 
