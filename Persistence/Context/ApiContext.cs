@@ -1,9 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
+﻿using Entities.Entity;
 using Microsoft.EntityFrameworkCore;
-using Entities.Entity;
+using System.Diagnostics.CodeAnalysis;
 
-namespace Entities.Context;
+namespace Persistence.Context;
 
 [ExcludeFromCodeCoverage]
 public class ApiContext : DbContext

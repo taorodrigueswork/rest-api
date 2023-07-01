@@ -1,9 +1,11 @@
 using Business;
 using Business.Interfaces;
-using Entities.Context;
 using Entities.DTO.Request.Person;
 using Entities.Entity;
 using Microsoft.EntityFrameworkCore;
+using Persistence.Context;
+using Persistence.Interfaces;
+using Persistence.Repository.GenericRepository;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -12,7 +14,7 @@ Log.Logger = new LoggerConfiguration()
 
 try
 {
-    Log.Information("Starting web host");
+
 
     var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +22,8 @@ try
     // https://andrewlock.net/exploring-dotnet-6-part-12-upgrading-a-dotnet-5-startup-based-app-to-dotnet-6/
     ConfigureConfiguration(builder.Configuration);
     ConfigureServices(builder.Services);
+
+    Log.Information("Starting web host");
 
     var app = builder.Build();
 
@@ -61,6 +65,7 @@ try
     void ConfigureServices(IServiceCollection services)
     {
         // Add services to the container.
+        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped<IBusiness<PersonDTO, PersonEntity>, PersonBusiness>();
 
         builder.Services.AddControllers();

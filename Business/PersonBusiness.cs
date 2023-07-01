@@ -1,16 +1,19 @@
 ﻿using Entities.DTO.Request.Person;
 using Microsoft.Extensions.Logging;
+using Persistence.Interfaces;
 
 namespace Business;
 public class PersonBusiness : IBusiness<PersonDTO, PersonEntity>
 {
     private readonly IMapper _mapper;
     private readonly ILogger<PersonBusiness> _logger;
+    private readonly IGenericRepository<PersonEntity> _repository;
 
-    public PersonBusiness(IMapper mapper, ILogger<PersonBusiness> logger)
+    public PersonBusiness(IMapper mapper, ILogger<PersonBusiness> logger, IGenericRepository<PersonEntity> repository)
     {
         _mapper = mapper;
         _logger = logger;
+        _repository = repository;
     }
 
     public PersonEntity Add(PersonDTO entity)

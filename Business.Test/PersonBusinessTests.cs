@@ -1,11 +1,16 @@
 namespace Business.Test;
 
 using Entities.DTO.Request.Person;
+using Microsoft.Extensions.Logging;
+using Moq;
+using Persistence.Interfaces;
 
 [TestClass()]
 public class PersonBusinessTests
 {
     private PersonBusiness? _personBusiness;
+    private Mock<IGenericRepository<PersonEntity>> _personRepositoryMock;
+    private Mock<ILogger<PersonBusiness>> _loggerMock;
 
     [TestInitialize]
     public void Setup()
@@ -13,7 +18,11 @@ public class PersonBusinessTests
         // Add AutoMapper Profile to avoid duplicated code.
         // The profile is inside the Entities project and is also used in the API project when the project starts.
         var config = new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperProfile>());
-        _personBusiness = new PersonBusiness(config.CreateMapper());
+
+        _personRepositoryMock = new Mock<IGenericRepository<PersonEntity>>();
+        _loggerMock = new Mock<ILogger<PersonBusiness>>();
+
+        _personBusiness = new PersonBusiness(config.CreateMapper(), _loggerMock.Object, _personRepositoryMock.Object);
     }
 
 
