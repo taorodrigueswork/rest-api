@@ -33,7 +33,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class, new()
 
     public async Task<T> FindAsync(Expression<Func<T, bool>> whereClause)
     {
-        var entity = await Context.Set<T>().AsNoTracking().FirstOrDefaultAsync(whereClause);
+        var entity = await Context.Set<T>().FirstOrDefaultAsync(whereClause);
 
         if (entity != null)
         {
@@ -41,6 +41,18 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class, new()
         }
 
         return new T();
+    }
+
+    public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> whereClause)
+    {
+        var entity = await Context.Set<T>().FindAsync(whereClause);
+
+        if (entity != null)
+        {
+            return (IEnumerable<T>)entity;
+        }
+
+        return new List<T>();
     }
 
     public async Task DeleteAsync(T entity, Func<T, bool> predicate = default!)
@@ -63,6 +75,18 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class, new()
         }
 
         Context.Set<T>().Update(entity);
+
+        await SaveDatabaseAsync();
+    }
+
+    public async Task UpdateRangeAsync(T entity, Func<T, bool> predicate = default!)
+    {
+        if (predicate != default)
+        {
+            DetachLocal(predicate);
+        }
+
+        Context.Set<T>().UpdateRange(entity);
 
         await SaveDatabaseAsync();
     }

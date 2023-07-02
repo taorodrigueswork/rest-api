@@ -28,9 +28,8 @@ public class ApiContext : DbContext
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        //optionsBuilder.UseChangeTrackingProxies(false, false);
-    }
+    { }
+
 
     public DbSet<PersonEntity>? Person { get; set; }
     public DbSet<DayEntity>? Day { get; set; }

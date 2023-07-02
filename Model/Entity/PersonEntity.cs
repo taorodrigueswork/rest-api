@@ -20,5 +20,5 @@ public class PersonEntity
     [Column(TypeName = "varchar(128)")]
     public string Email { get; set; } = null!;
 
-    public List<DayEntity> Days { get; set; } = new();
+    public virtual List<DayEntity> Days { get; set; } = new();
 }

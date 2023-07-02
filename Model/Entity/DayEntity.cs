@@ -16,5 +16,5 @@ public class DayEntity : BaseEntity
     [ForeignKey("ScheduleId")]
     public virtual ScheduleEntity Schedule { get; set; } = null!;
 
-    public List<PersonEntity> People { get; set; } = new();
+    public virtual List<PersonEntity> People { get; set; } = new();
 }

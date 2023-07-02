@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
 using Persistence.Interfaces;
+using Persistence.Repository;
 using Persistence.Repository.GenericRepository;
 using Serilog;
 using System.Text.Json.Serialization;
@@ -75,6 +76,8 @@ try
         // Add services to the container.
         services.AddScoped<DbContext, ApiContext>();
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        services.AddScoped<IDayRepository, DayRepository>();
+        services.AddScoped<IScheduleRepository, ScheduleRepository>();
         services.AddScoped<IBusiness<PersonDTO, PersonEntity>, PersonBusiness>();
         services.AddScoped<IBusiness<DayDTO, DayEntity>, DayBusiness>();
         services.AddScoped<IBusiness<ScheduleDTO, ScheduleEntity>, ScheduleBusiness>();

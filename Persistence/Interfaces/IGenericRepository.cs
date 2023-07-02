@@ -25,6 +25,8 @@ public interface IGenericRepository<T> where T : class
     /// <returns>Located object</returns>
     Task<T> FindAsync(Expression<Func<T, bool>> whereClause);
 
+    Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> whereClause);
+
     /// <summary>
     /// Delete data from database
     /// </summary>
@@ -40,4 +42,6 @@ public interface IGenericRepository<T> where T : class
     /// <param name="predicate">Filter to update in specific case</param>
     /// <returns></returns>
     Task UpdateAsync(T entity, Func<T, bool> predicate = default!);
+
+    Task UpdateRangeAsync(T entity, Func<T, bool> predicate = default!);
 }
