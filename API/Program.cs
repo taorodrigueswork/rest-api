@@ -75,9 +75,13 @@ try
 
         // Add services to the container.
         services.AddScoped<DbContext, ApiContext>();
+
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped<IDayRepository, DayRepository>();
+        services.AddScoped<IPersonRepository, PersonRepository>();
+        services.AddScoped<IDayPersonRepository, DayPersonRepository>();
         services.AddScoped<IScheduleRepository, ScheduleRepository>();
+
         services.AddScoped<IBusiness<PersonDTO, PersonEntity>, PersonBusiness>();
         services.AddScoped<IBusiness<DayDTO, DayEntity>, DayBusiness>();
         services.AddScoped<IBusiness<ScheduleDTO, ScheduleEntity>, ScheduleBusiness>();

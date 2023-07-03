@@ -6,10 +6,9 @@ using Persistence.Repository.GenericRepository;
 
 namespace Persistence.Repository;
 
-public class ScheduleRepository : GenericRepository<ScheduleEntity>, IScheduleRepository
+public class DayPersonRepository : GenericRepository<DayPersonEntity>, IDayPersonRepository
 {
-
-    public ScheduleRepository(ApiContext apiContext)
+    public DayPersonRepository(ApiContext apiContext)
         : base(apiContext)
     {
 

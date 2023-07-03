@@ -8,17 +8,20 @@ public class DayBusiness : IBusiness<DayDTO, DayEntity>
     private readonly IMapper _mapper;
     private readonly ILogger<DayBusiness> _logger;
     private readonly IDayRepository _dayRepository;
+    private readonly IPersonRepository _personRepository;
     private readonly IScheduleRepository _scheduleRepository;
     private readonly IGenericRepository<DayPersonEntity> _dayPersonRepository;
     public DayBusiness(IMapper mapper,
         ILogger<DayBusiness> logger,
         IDayRepository dayRepository,
+        IPersonRepository personRepository,
         IScheduleRepository scheduleRepository,
         IGenericRepository<DayPersonEntity> dayPersonRepository)
     {
         _mapper = mapper;
         _logger = logger;
         _dayRepository = dayRepository;
+        _personRepository = personRepository;
         _scheduleRepository = scheduleRepository;
         _dayPersonRepository = dayPersonRepository;
     }
@@ -53,16 +56,13 @@ public class DayBusiness : IBusiness<DayDTO, DayEntity>
 
     public async Task<DayEntity> Update(int id, DayDTO entity)
     {
-        var day = await _dayRepository.GetDayWithSubclasses(id);
+        var day = await _dayRepository.GetDayWithSubclassesAsync(id);
 
         if (day == null)
         {
             _logger.LogWarning($"The day with id {id} was not found.");
             return null;
         }
-
-        day.Day = entity.Day;
-        day.Schedule = await _scheduleRepository.FindByIdAsync(entity.ScheduleId);
 
         // Delete all people from the day many to many relationship
         foreach (var person in day.People)
@@ -74,11 +74,10 @@ public class DayBusiness : IBusiness<DayDTO, DayEntity>
             });
         }
 
-        // Clear the old list of people in the memory
-        day.People.Clear();
-
-        // Recover the new list of people from the database
-        day.People = await _dayRepository.GetPeopleAsync(entity.People);
+        day.Day = entity.Day;
+        day.Schedule = await _scheduleRepository.FindByIdAsync(entity.ScheduleId);
+        day.People.Clear();// Clear the old list of people in the memory
+        day.People = await _personRepository.GetPeopleAsync(entity.People);// Recover the new list of people from the database
 
         await _dayRepository.UpdateAsync(day);
 
