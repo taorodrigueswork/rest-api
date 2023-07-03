@@ -16,10 +16,11 @@ This project requires the following technologies:
 - Automapper
 - MSTest
 - Swagger
-
-## Future Implementations
 - Global Error Middleware
 - Repository Pattern
+
+## Future Implementations
+
 - OAuth
 - Coverlet
 - Docker File
