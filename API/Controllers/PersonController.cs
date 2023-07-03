@@ -59,6 +59,7 @@ public class PersonController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PersonEntity))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+    [ServiceFilter(typeof(ValidationFilterAttribute))]
     public async Task<IActionResult> UpdatePersonAsync([FromHeader] int personId, [FromBody] PersonDTO personDTO)
     {
         var updatedPerson = await _personBusiness.Update(personId, personDTO);

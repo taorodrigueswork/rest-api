@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Persistence.Interfaces;
+using Persistence.Interfaces.GenericRepository;
 using System.Linq.Expressions;
 
 namespace Persistence.Repository.GenericRepository;
@@ -91,20 +91,12 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class, new()
         await SaveDatabaseAsync();
     }
 
-    /// <summary>
-    /// Save changes on database
-    /// </summary>
-    /// <returns></returns>
     private async Task SaveDatabaseAsync()
     {
         await Context.SaveChangesAsync();
     }
 
 
-    /// <summary>
-    /// Detach local data from database
-    /// </summary>
-    /// <param name="predicate">Filter to find data to detach</param>
     private void DetachLocal(Func<T, bool> predicate)
     {
         var local = Context.Set<T>().Local.FirstOrDefault(predicate);

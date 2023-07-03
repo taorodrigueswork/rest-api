@@ -1,6 +1,6 @@
 ﻿using Entities.DTO.Request.Person;
 using Microsoft.Extensions.Logging;
-using Persistence.Interfaces;
+using Persistence.Interfaces.GenericRepository;
 
 namespace Business;
 public class PersonBusiness : IBusiness<PersonDTO, PersonEntity>

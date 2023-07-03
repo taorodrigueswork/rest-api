@@ -3,7 +3,7 @@ namespace Business.Test;
 using Entities.DTO.Request.Person;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Persistence.Interfaces;
+using Persistence.Interfaces.GenericRepository;
 using System.Threading.Tasks;
 
 [TestClass()]

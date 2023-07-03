@@ -5,10 +5,12 @@ using Entities.DTO.Request.Day;
 using Entities.DTO.Request.Person;
 using Entities.DTO.Request.Schedule;
 using Entities.Entity;
+using ExceptionHandling.CustomMiddleware;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
 using Persistence.Interfaces;
+using Persistence.Interfaces.GenericRepository;
 using Persistence.Repository;
 using Persistence.Repository.GenericRepository;
 using Serilog;
@@ -125,6 +127,8 @@ try
             app.UseSwaggerUI();
             app.UseDeveloperExceptionPage();
         }
+
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
 
         app.UseHttpsRedirection();
 

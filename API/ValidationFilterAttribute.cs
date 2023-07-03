@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace API;
 
+/// <summary>
+/// Checks the validity of the model state data received in an action method context and returns an appropriate result in the HTTP response.
+/// </summary>
 public class ValidationFilterAttribute : IActionFilter
 {
     public void OnActionExecuting(ActionExecutingContext context)

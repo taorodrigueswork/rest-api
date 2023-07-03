@@ -1,6 +1,6 @@
 ﻿using Entities.DTO.Request.Schedule;
 using Microsoft.Extensions.Logging;
-using Persistence.Interfaces;
+using Persistence.Interfaces.GenericRepository;
 
 namespace Business;
 public class ScheduleBusiness : IBusiness<ScheduleDTO, ScheduleEntity>

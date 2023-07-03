@@ -1,6 +1,7 @@
 ﻿using Entities.DTO.Request.Day;
 using Microsoft.Extensions.Logging;
 using Persistence.Interfaces;
+using Persistence.Interfaces.GenericRepository;
 
 namespace Business;
 public class DayBusiness : IBusiness<DayDTO, DayEntity>

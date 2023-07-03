@@ -40,6 +40,7 @@ public class DayController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(DayEntity))]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+    [ServiceFilter(typeof(ValidationFilterAttribute))]
     public async Task<IActionResult> AddDayAsync([FromBody] DayDTO dayDTO)
     {
         return dayDTO == null ? BadRequest("Day cannot be null") : Created(string.Empty, await _dayBusiness.Add(dayDTO));
@@ -55,6 +56,7 @@ public class DayController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DayEntity))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+    [ServiceFilter(typeof(ValidationFilterAttribute))]
     public async Task<IActionResult> UpdateDayAsync([FromHeader] int dayId, [FromBody] DayDTO dayDTO)
     {
         var updatedDay = await _dayBusiness.Update(dayId, dayDTO);

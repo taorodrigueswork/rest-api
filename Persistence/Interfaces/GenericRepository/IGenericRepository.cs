@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Persistence.Interfaces;
+namespace Persistence.Interfaces.GenericRepository;
 
 public interface IGenericRepository<T> where T : class
 {
