@@ -19,6 +19,7 @@ public class ApiContext : DbContext
 
         // Configuring indirect many-to-many relationship between Day and Person using explicit class DayPersonEntity
         // check this link for more information: https://docs.microsoft.com/en-us/ef/core/modeling/relationships#many-to-many
+        // https://www.thereformedprogrammer.net/updating-many-to-many-relationships-in-ef-core-5-and-above/
         modelBuilder.Entity<DayEntity>()
             .HasMany(n => n.People)
             .WithMany(n => n.Days)

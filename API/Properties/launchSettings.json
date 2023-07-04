@@ -5,7 +5,9 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "VaultUri": "https://api-template.vault.azure.net/",
+        "AZURE_USERNAME": "taorodrigueswork@gmail.com"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5004"
@@ -15,7 +17,9 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "VaultUri": "https://api-template.vault.azure.net/",
+        "AZURE_USERNAME": "taorodrigueswork@gmail.com"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7159;http://localhost:5004"
@@ -25,7 +29,9 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "VaultUri": "https://api-template.vault.azure.net/",
+        "AZURE_USERNAME": "taorodrigueswork@gmail.com"
       }
     },
     "Docker": {
@@ -33,7 +39,9 @@
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
       "environmentVariables": {
-        "ASPNETCORE_URLS": "https://+:443;http://+:80"
+        "ASPNETCORE_URLS": "https://+:443;http://+:80",
+        "VaultUri": "https://api-template.vault.azure.net/",
+        "AZURE_USERNAME": "taorodrigueswork@gmail.com"
       },
       "publishAllPorts": true,
       "useSSL": true

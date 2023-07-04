@@ -1,4 +1,6 @@
 using API;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 using Business;
 using Business.Interfaces;
 using Entities.DTO.Request.Day;
@@ -98,14 +100,32 @@ try
         builder.Services.AddSwaggerGen();
         builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-        // Connect to the database
-        var connectionString = builder.Configuration.GetConnectionString("SqlServer");
+        // Connect to Azure Key Vault using Azure Managed Identity
+        var keyVaultURL = builder.Configuration["AzureKeyVault:Url"]!;
 
-        builder.Services.AddDbContext<ApiContext>(options =>
+        builder.Configuration.AddAzureKeyVault(new Uri(keyVaultURL), new DefaultAzureCredential());
+
+        var keyVaultClient = new SecretClient(new Uri(keyVaultURL), new DefaultAzureCredential());
+
+        // Connect to the database using Azure Key Vault and Azure Managed Identity to retrieve the connection string
+        if (builder.Environment.IsProduction())
         {
-            options.UseSqlServer(connectionString)
-                   .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-        });
+            builder.Services.AddDbContext<ApiContext>(options =>
+            {
+                options.UseSqlServer(keyVaultClient.GetSecret("ConnectionStrings--SqlServer").Value.ToString())
+                       .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            });
+        }
+
+        // Access the database using the local connection string is running locally
+        if (builder.Environment.IsDevelopment())
+        {
+            builder.Services.AddDbContext<ApiContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("LocalSqlServer"))
+                       .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            });
+        }
     }
 
     void ConfigureMiddleware(WebApplication app)
@@ -113,8 +133,7 @@ try
         // Migrate latest database changes during startup
         using (var scope = app.Services.CreateScope())
         {
-            var dbContext = scope.ServiceProvider
-                .GetRequiredService<ApiContext>();
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
 
             // Here is the migration executed
             dbContext.Database.Migrate();
