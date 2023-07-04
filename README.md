@@ -18,6 +18,7 @@ This project requires the following technologies:
 - Swagger
 - Global Error Middleware
 - Repository Pattern
+- Azure Key Vault
 
 ## Future Implementations
 
@@ -25,7 +26,6 @@ This project requires the following technologies:
 - Coverlet
 - Docker File
 - AKS
-- AKV
   
 
 ## Project Structure
@@ -69,4 +69,6 @@ All the migrations are going to run automatically when the application runs.
 
 DTOs are used to prevent exposing entity models directly to the API consumers. It allows for maintaining a clear separation between the application and the database. AutoMapper library is used to map data between DTOs and entity models.
 
+### Azure Key Vault
 
+Azure Key Vault is a cloud service that can be used to store secrets and configuration data for .NET or ASP.NET Core applications. Azure Key Vault securely stores secret values and allows access to those values without any explicit code change to both applications hosted in Azure and users based on their Azure credentials.
