@@ -6,7 +6,6 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "VaultUri": "https://api-template.vault.azure.net/",
         "AZURE_USERNAME": "taorodrigueswork@gmail.com"
       },
       "dotnetRunMessages": true,
@@ -18,7 +17,6 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "VaultUri": "https://api-template.vault.azure.net/",
         "AZURE_USERNAME": "taorodrigueswork@gmail.com"
       },
       "dotnetRunMessages": true,
@@ -30,7 +28,6 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "VaultUri": "https://api-template.vault.azure.net/",
         "AZURE_USERNAME": "taorodrigueswork@gmail.com"
       }
     },
@@ -40,7 +37,6 @@
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
       "environmentVariables": {
         "ASPNETCORE_URLS": "https://+:443;http://+:80",
-        "VaultUri": "https://api-template.vault.azure.net/",
         "AZURE_USERNAME": "taorodrigueswork@gmail.com"
       },
       "publishAllPorts": true,

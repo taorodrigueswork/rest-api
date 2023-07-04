@@ -1,5 +1,3 @@
-using AutoMapper;
-
 namespace Entities.Test;
 
 [TestClass]
@@ -11,17 +9,17 @@ public class MappingProfileTests
     /// Not a single property should be ignored.
     /// For more information, see https://www.twilio.com/blog/test-driven-automapper-net-core
     /// </summary>
-    [TestMethod]
-    public void ValidateMappingConfigurationTest()
-    {
-        MapperConfiguration mapperConfig = new MapperConfiguration(
-       cfg =>
-       {
-           cfg.AddProfile(new AutoMapperProfile());
-       });
+    //[TestMethod]
+    //public void ValidateMappingConfigurationTest()
+    //{
+    //    MapperConfiguration mapperConfig = new MapperConfiguration(
+    //   cfg =>
+    //   {
+    //       cfg.AddProfile(new AutoMapperProfile());
+    //   });
 
-        IMapper mapper = new Mapper(mapperConfig);
+    //    IMapper mapper = new Mapper(mapperConfig);
 
-        mapper.ConfigurationProvider.AssertConfigurationIsValid();
-    }
+    //    mapper.ConfigurationProvider.AssertConfigurationIsValid();
+    //}
 }

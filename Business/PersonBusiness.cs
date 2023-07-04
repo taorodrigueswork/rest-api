@@ -1,24 +1,24 @@
 ﻿using Entities.DTO.Request.Person;
 using Microsoft.Extensions.Logging;
-using Persistence.Interfaces.GenericRepository;
+using Persistence.Interfaces;
 
 namespace Business;
 public class PersonBusiness : IBusiness<PersonDTO, PersonEntity>
 {
     private readonly IMapper _mapper;
     private readonly ILogger<PersonBusiness> _logger;
-    private readonly IGenericRepository<PersonEntity> _repository;
+    private readonly IPersonRepository _personRepository;
 
-    public PersonBusiness(IMapper mapper, ILogger<PersonBusiness> logger, IGenericRepository<PersonEntity> repository)
+    public PersonBusiness(IMapper mapper, ILogger<PersonBusiness> logger, IPersonRepository personRepository)
     {
         _mapper = mapper;
         _logger = logger;
-        _repository = repository;
+        _personRepository = personRepository;
     }
 
     public async Task<PersonEntity> Add(PersonDTO personDTO)
     {
-        var person = await _repository.InsertAsync(_mapper.Map<PersonEntity>(personDTO));
+        var person = await _personRepository.InsertAsync(_mapper.Map<PersonEntity>(personDTO));
 
         _logger.LogInformation($"Added person ", person);
 
@@ -27,12 +27,12 @@ public class PersonBusiness : IBusiness<PersonDTO, PersonEntity>
 
     public async Task<PersonEntity> Delete(int id)
     {
-        var person = await _repository.FindByIdAsync(id);
+        var person = await _personRepository.FindByIdAsync(id);
 
         if (person != null)
         {
             _logger.LogInformation($"Deleted person.", person);
-            await _repository.DeleteAsync(person);
+            await _personRepository.DeleteAsync(person);
         }
 
         _logger.LogWarning($"The person with id {id} was not found.");
@@ -41,12 +41,12 @@ public class PersonBusiness : IBusiness<PersonDTO, PersonEntity>
 
     public async Task<PersonEntity> GetById(int id)
     {
-        return await _repository.FindByIdAsync(id);
+        return await _personRepository.FindByIdAsync(id);
     }
 
     public async Task<PersonEntity> Update(int personId, PersonDTO personDTO)
     {
-        var person = await _repository.FindByIdAsync(personId);
+        var person = await _personRepository.FindByIdAsync(personId);
 
         if (person == null)
         {
@@ -58,7 +58,7 @@ public class PersonBusiness : IBusiness<PersonDTO, PersonEntity>
         person = _mapper.Map<PersonEntity>(personDTO);
         person.Id = personId;
 
-        await _repository.UpdateAsync(person);
+        await _personRepository.UpdateAsync(person);
 
         _logger.LogInformation($"Updated person with name {person.Name} and ID {person.Id}", person);
 
