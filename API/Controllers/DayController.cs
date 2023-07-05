@@ -12,6 +12,7 @@ public class DayController : ControllerBase
     private readonly IBusiness<DayDTO, DayEntity> _dayBusiness;
     private readonly ILogger<DayController> _logger;
 
+
     public DayController(IBusiness<DayDTO, DayEntity> dayBusiness, ILogger<DayController> logger)
     {
         _dayBusiness = dayBusiness;

@@ -35,4 +35,5 @@ public class ApiContext : DbContext
     public DbSet<PersonEntity>? Person { get; set; }
     public DbSet<DayEntity>? Day { get; set; }
     public DbSet<ScheduleEntity>? Schedule { get; set; }
+    public DbSet<DayPersonEntity>? DayPerson { get; set; }
 }

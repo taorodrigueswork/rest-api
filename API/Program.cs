@@ -46,13 +46,6 @@ try
         // Add Serilog to the application
         // https://www.youtube.com/watch?v=0acSdHJfk64
         // https://dotnetintellect.com/2020/09/06/logging-with-elasticsearch-kibana-serilog-using-asp-net-core-docker/
-        // Seq: 
-        // Serilog configuration
-        // _logger.LogInformation("Log message generated with INFORMATION severity level.");
-        // _logger.LogWarning("Log message generated with WARNING severity level.");
-        // _logger.LogError("Log message generated with ERROR severity level.");
-        // _logger.LogCritical("Log message log generated with CRITICAL severity level.");
-
         builder.Host.UseSerilog(new LoggerConfiguration()
             .Enrich.FromLogContext()
             .Enrich.WithMachineName()
@@ -100,16 +93,16 @@ try
         builder.Services.AddSwaggerGen();
         builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-        // Connect to Azure Key Vault using Azure Managed Identity
-        var keyVaultURL = builder.Configuration["AzureKeyVault:Url"]!;
-
-        builder.Configuration.AddAzureKeyVault(new Uri(keyVaultURL), new DefaultAzureCredential());
-
-        var keyVaultClient = new SecretClient(new Uri(keyVaultURL), new DefaultAzureCredential());
-
         // Connect to the database using Azure Key Vault and Azure Managed Identity to retrieve the connection string
         if (builder.Environment.IsProduction())
         {
+            // Connect to Azure Key Vault using Azure Managed Identity
+            var keyVaultURL = builder.Configuration["AzureKeyVault:Url"]!;
+
+            builder.Configuration.AddAzureKeyVault(new Uri(keyVaultURL), new DefaultAzureCredential());
+
+            var keyVaultClient = new SecretClient(new Uri(keyVaultURL), new DefaultAzureCredential());
+
             builder.Services.AddDbContext<ApiContext>(options =>
             {
                 options.UseSqlServer(keyVaultClient.GetSecret("ConnectionStrings--SqlServer").Value.ToString())
@@ -122,7 +115,7 @@ try
         {
             builder.Services.AddDbContext<ApiContext>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("LocalSqlServer"))
+                options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"))
                        .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
         }
