@@ -58,3 +58,13 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
       working-directory: ./API
+      
+    - name: Create Awesome Badge
+      uses: schneegans/dynamic-badges-action@v1.6.0
+      with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: 76adb9c1322aed1e5ba941d7550e7007
+          filename: test.json
+          label: Hello
+          message: World
+          color: orange
