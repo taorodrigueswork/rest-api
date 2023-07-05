@@ -43,6 +43,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
+          dotnet tool install --global dotnet-coverage
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"taorodrigueswork_rest-api" /o:"taorodrigueswork" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
           dotnet build ./API
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
