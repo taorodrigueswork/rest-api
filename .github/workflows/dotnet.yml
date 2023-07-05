@@ -51,7 +51,7 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       shell: pwsh
       run: |
-          dotnet tool update --global dotnet-reportgenerator-globaltool
+          dotnet tool update --global dotnet-sonarscanner
           ./.sonar/scanner/dotnet-sonarscanner begin /k:"taorodrigueswork_rest-api" /o:"taorodrigueswork" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
           dotnet build ./API
           dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover -l trx
