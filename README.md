@@ -1,3 +1,5 @@
+[![Build and Test](https://github.com/taorodrigueswork/rest-api/actions/workflows/dotnet.yml/badge.svg?branch=main)](https://github.com/taorodrigueswork/rest-api/actions/workflows/dotnet.yml)
+
 # REST API TEMPLATE WEB API .NET CORE 7 
 
 This is a template for building RESTful APIs using .NET 7. It includes a basic project structure and some common components such as logging, and database connectivity. 
