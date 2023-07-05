@@ -23,7 +23,7 @@ jobs:
         dotnet-version: 7.0.x
         
     - name: Cache SonarCloud packages
-      uses: actions/cache@v1
+      uses: actions/cache@v3
       with:
         path: ~\sonar\cache
         key: ${{ runner.os }}-sonar
@@ -31,7 +31,7 @@ jobs:
       
     - name: Cache SonarCloud scanner
       id: cache-sonar-scanner
-      uses: actions/cache@v1
+      uses: actions/cache@v3
       with:
         path: .\.sonar\scanner
         key: ${{ runner.os }}-sonar-scanner
@@ -39,7 +39,10 @@ jobs:
       
     - name: Install SonarCloud scanner
       if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
-      run: dotnet tool update dotnet-sonarscanner --tool-path ./.sonar/scanner
+      shell: pwsh
+      run: |
+          New-Item -Path .\.sonar\scanner -ItemType Directory
+          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
       
     - name: Install project dependencies
       run: dotnet restore
