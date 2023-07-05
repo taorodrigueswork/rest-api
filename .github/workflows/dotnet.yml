@@ -54,7 +54,6 @@ jobs:
           dotnet build ./API
           dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover -l trx
           dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-      working-directory: ./API
       
     - name: Build
       run: dotnet build --configuration Release --no-restore
