@@ -8,7 +8,8 @@ using Persistence.Interfaces;
 [TestClass()]
 public class PersonBusinessTests
 {
-    private Fixture? fixture;
+    private Fixture? _fixture;
+    private IMapper _mapperMock;
     private PersonBusiness? _personBusiness;
     private Mock<IPersonRepository>? _personRepositoryMock;
     private Mock<ILogger<PersonBusiness>> _loggerMock;
@@ -16,27 +17,31 @@ public class PersonBusinessTests
     [TestInitialize]
     public void TestInit()
     {
-        // Add AutoMapper Profile to avoid duplicated code.
-        // The profile is inside the Entities project and is also used in the API project when the project starts.
-        var config = new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperProfile>());
+        // AutoMapperMock setup
+        var mapperConfig = new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperProfile>());
+        _mapperMock = mapperConfig.CreateMapper();
 
-        fixture = new Fixture();// https://docs.educationsmediagroup.com/unit-testing-csharp/autofixture/quick-glance-at-autofixture
-        fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
-                         .ForEach(b => fixture.Behaviors.Remove(b));
-        fixture.Behaviors.Add(new OmitOnRecursionBehavior());// using this property to avoid circular references
+        _fixture = new Fixture();// https://docs.educationsmediagroup.com/unit-testing-csharp/autofixture/quick-glance-at-autofixture
+        _fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
+                         .ForEach(b => _fixture.Behaviors.Remove(b));
+        _fixture.Behaviors.Add(new OmitOnRecursionBehavior());// using this property to avoid circular references
 
+        // Repository Moq setup
         _personRepositoryMock = new Mock<IPersonRepository>();
+
+        // ILogger mock setup
         _loggerMock = new Mock<ILogger<PersonBusiness>>();
 
-        _personBusiness = new PersonBusiness(config.CreateMapper(), _loggerMock.Object, _personRepositoryMock.Object);
+        // Subject to test
+        _personBusiness = new PersonBusiness(_mapperMock, _loggerMock.Object, _personRepositoryMock.Object);
     }
 
     [TestMethod]
-    public async Task Add_PersonDto_ReturnsPersonEntity()
+    public async Task Add_PersonDto_ReturnsPersonEntityAsync()
     {
         // Arrange
-        PersonDto personDTO = fixture.Create<PersonDto>();
-        PersonEntity personEntity = fixture.Create<PersonEntity>();
+        PersonDto personDTO = _fixture.Create<PersonDto>();
+        PersonEntity personEntity = _fixture.Create<PersonEntity>();
 
         _personRepositoryMock.Setup(r => r.InsertAsync(It.IsAny<PersonEntity>())).ReturnsAsync(personEntity);
 
@@ -51,11 +56,11 @@ public class PersonBusinessTests
     }
 
     [TestMethod]
-    public async Task Delete_Person_by_id_ReturnsPersonEntity()
+    public async Task Delete_Person_by_id_ReturnsPersonEntityAsync()
     {
         // Arrange
-        var id = fixture.Create<int>();
-        PersonEntity personEntity = fixture.Create<PersonEntity>();
+        var id = _fixture.Create<int>();
+        PersonEntity personEntity = _fixture.Create<PersonEntity>();
 
         _personRepositoryMock.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(personEntity);
 
@@ -72,10 +77,10 @@ public class PersonBusinessTests
     }
 
     [TestMethod]
-    public async Task Delete_NotFound_ReturnsNull()
+    public async Task Delete_NotFound_ReturnsNullAsync()
     {
         // Arrange
-        var id = fixture.Create<int>();
+        var id = _fixture.Create<int>();
         PersonEntity? personEntity = null;
 
         _personRepositoryMock.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(personEntity);
@@ -91,11 +96,11 @@ public class PersonBusinessTests
     }
 
     [TestMethod]
-    public async Task GetById_Int_ReturnsPersonEntity()
+    public async Task GetById_Int_ReturnsPersonEntityAsync()
     {
         // Arrange
-        var id = fixture.Create<int>();
-        var personEntity = fixture.Create<PersonEntity>();
+        var id = _fixture.Create<int>();
+        var personEntity = _fixture.Create<PersonEntity>();
 
         _personRepositoryMock.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(personEntity);
 
@@ -109,12 +114,12 @@ public class PersonBusinessTests
     }
 
     [TestMethod]
-    public async Task Update_PersonDto_ReturnsPersonEntity()
+    public async Task Update_PersonDto_ReturnsPersonEntityAsync()
     {
         // Arrange
-        var id = fixture.Create<int>();
-        var personDto = fixture.Create<PersonDto>();
-        var personEntity = fixture.Create<PersonEntity>();
+        var id = _fixture.Create<int>();
+        var personDto = _fixture.Create<PersonDto>();
+        var personEntity = _fixture.Create<PersonEntity>();
         personEntity.Id = id;
 
         _personRepositoryMock.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(personEntity);
@@ -129,11 +134,11 @@ public class PersonBusinessTests
     }
 
     [TestMethod]
-    public async Task Update_NotFound_ReturnsNull()
+    public async Task Update_NotFound_ReturnsNullAsync()
     {
         // Arrange
-        var id = fixture.Create<int>();
-        var personDto = fixture.Build<PersonDto>().Create();
+        var id = _fixture.Create<int>();
+        var personDto = _fixture.Build<PersonDto>().Create();
         PersonEntity? personEntity = null;
 
         _personRepositoryMock.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(personEntity);

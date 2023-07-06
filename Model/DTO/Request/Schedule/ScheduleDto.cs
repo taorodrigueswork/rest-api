@@ -1,5 +1,8 @@
-﻿namespace Entities.DTO.Request.Schedule;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace Entities.DTO.Request.Schedule;
+
+[ExcludeFromCodeCoverage]
 public record ScheduleDto
 {
     public required string Name { get; init; }

@@ -1,5 +1,8 @@
-﻿namespace Entities.DTO.Request.Day;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace Entities.DTO.Request.Day;
+
+[ExcludeFromCodeCoverage]
 public record DayDto
 {
     public required DateTime Day { get; init; }

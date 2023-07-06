@@ -45,8 +45,10 @@ public class DayBusiness : IBusiness<DayDto, DayEntity>
             _logger.LogInformation($"Deleted day.", day);
             await _dayRepository.DeleteAsync(day);
         }
-
-        _logger.LogWarning($"The day with id {id} was not found.");
+        else
+        {
+            _logger.LogWarning($"The day with id {id} was not found.");
+        }
         return day;
     }
 

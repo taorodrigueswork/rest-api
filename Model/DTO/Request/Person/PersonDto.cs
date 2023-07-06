@@ -1,5 +1,8 @@
-﻿namespace Entities.DTO.Request.Person;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace Entities.DTO.Request.Person;
+
+[ExcludeFromCodeCoverage]
 public record PersonDto
 {
     public required string Name { get; init; }
