@@ -4,7 +4,7 @@ using Persistence.Interfaces;
 using Persistence.Interfaces.GenericRepository;
 
 namespace Business;
-public class DayBusiness : IBusiness<DayDTO, DayEntity>
+public class DayBusiness : IBusiness<DayDto, DayEntity>
 {
     private readonly IMapper _mapper;
     private readonly ILogger<DayBusiness> _logger;
@@ -27,7 +27,7 @@ public class DayBusiness : IBusiness<DayDTO, DayEntity>
         _dayPersonRepository = dayPersonRepository;
     }
 
-    public async Task<DayEntity> Add(DayDTO entity)
+    public async Task<DayEntity> Add(DayDto entity)
     {
         var day = await _dayRepository.InsertAsync(_mapper.Map<DayEntity>(entity));
 
@@ -36,7 +36,7 @@ public class DayBusiness : IBusiness<DayDTO, DayEntity>
         return day;
     }
 
-    public async Task<DayEntity> Delete(int id)
+    public async Task<DayEntity?> Delete(int id)
     {
         var day = await _dayRepository.FindByIdAsync(id);
 
@@ -55,14 +55,14 @@ public class DayBusiness : IBusiness<DayDTO, DayEntity>
         return await _dayRepository.FindByIdAsync(id);
     }
 
-    public async Task<DayEntity> Update(int id, DayDTO entity)
+    public async Task<DayEntity?> Update(int id, DayDto entity)
     {
         var day = await _dayRepository.GetDayWithSubclassesAsync(id);
 
         if (day == null)
         {
             _logger.LogWarning($"The day with id {id} was not found.");
-            return null;
+            return day;
         }
 
         // Delete all people from the day many to many relationship

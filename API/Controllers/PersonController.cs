@@ -11,13 +11,10 @@ namespace API.Controllers;
 [Consumes("application/json")]
 public class PersonController : ControllerBase
 {
-    private readonly ILogger<PersonController> _logger;
-    private readonly IBusiness<PersonDTO, PersonEntity> _personBusiness;
+    private readonly IBusiness<PersonDto, PersonEntity> _personBusiness;
 
-    public PersonController(ILogger<PersonController> logger,
-        IBusiness<PersonDTO, PersonEntity> personBusiness)
+    public PersonController(IBusiness<PersonDto, PersonEntity> personBusiness)
     {
-        _logger = logger;
         _personBusiness = personBusiness;
     }
 
@@ -44,7 +41,7 @@ public class PersonController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(PersonEntity))]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     [ServiceFilter(typeof(ValidationFilterAttribute))]
-    public async Task<IActionResult> AddPersonAsync([FromBody] PersonDTO personDTO)
+    public async Task<IActionResult> AddPersonAsync([FromBody] PersonDto personDTO)
     {
         return personDTO == null ? BadRequest("Person cannot be null") : Created(string.Empty, await _personBusiness.Add(personDTO));
     }
@@ -60,7 +57,7 @@ public class PersonController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     [ServiceFilter(typeof(ValidationFilterAttribute))]
-    public async Task<IActionResult> UpdatePersonAsync([FromHeader] int personId, [FromBody] PersonDTO personDTO)
+    public async Task<IActionResult> UpdatePersonAsync([FromHeader] int personId, [FromBody] PersonDto personDTO)
     {
         var updatedPerson = await _personBusiness.Update(personId, personDTO);
 

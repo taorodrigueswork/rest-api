@@ -16,7 +16,7 @@ public interface IGenericRepository<T> where T : class
     /// </summary>
     /// <param name="primaryKey">ProductEntityId to find</param>
     /// <returns>Located object/returns>
-    Task<T> FindByIdAsync(object primaryKey);
+    Task<T?> FindByIdAsync(object primaryKey);
 
     /// <summary>
     /// Find data from database by Filter

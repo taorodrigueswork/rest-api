@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using Persistence.Interfaces.GenericRepository;
 
 namespace Business;
-public class ScheduleBusiness : IBusiness<ScheduleDTO, ScheduleEntity>
+public class ScheduleBusiness : IBusiness<ScheduleDto, ScheduleEntity>
 {
     private readonly IMapper _mapper;
     private readonly ILogger<ScheduleBusiness> _logger;
@@ -18,12 +18,12 @@ public class ScheduleBusiness : IBusiness<ScheduleDTO, ScheduleEntity>
         _repository = repository;
     }
 
-    public Task<ScheduleEntity> Add(ScheduleDTO entity)
+    public Task<ScheduleEntity> Add(ScheduleDto entity)
     {
         throw new NotImplementedException();
     }
 
-    public Task<ScheduleEntity> Delete(int id)
+    public Task<ScheduleEntity?> Delete(int id)
     {
         throw new NotImplementedException();
     }
@@ -33,7 +33,7 @@ public class ScheduleBusiness : IBusiness<ScheduleDTO, ScheduleEntity>
         throw new NotImplementedException();
     }
 
-    public Task<ScheduleEntity> Update(int id, ScheduleDTO entity)
+    public Task<ScheduleEntity?> Update(int id, ScheduleDto entity)
     {
         throw new NotImplementedException();
     }

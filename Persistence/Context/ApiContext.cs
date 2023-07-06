@@ -29,7 +29,9 @@ public class ApiContext : DbContext
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { }
+    {
+        // Method intentionally left empty.
+    }
 
 
     public DbSet<PersonEntity>? Person { get; set; }

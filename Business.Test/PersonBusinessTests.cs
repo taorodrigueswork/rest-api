@@ -38,7 +38,7 @@ public class PersonBusinessTests
             Phone = "1234567890",
             Email = "johndoe@example.com"
         };
-        var personDTO = new PersonDTO
+        var personDTO = new PersonDto
         {
             Name = "John Doe",
             Phone = "1234567890",
@@ -97,11 +97,11 @@ public class PersonBusinessTests
     //[Fact]
     //public async Task Update_ExistingPerson_ReturnsPerson()
     //{
-    //    var personDTO = new PersonDTO { /* insert valid properties */ };
+    //    var personDTO = new PersonDto { /* insert valid properties */ };
     //    var personEntity = new PersonEntity { Id = 123, /* insert valid properties */ };
 
     //    _personRepositoryMock.Setup(r => r.FindByIdAsync(It.IsAny<int>())).ReturnsAsync(personEntity);
-    //    _mapperMock.Setup(m => m.Map<PersonEntity>(It.IsAny<PersonDTO>())).Returns(personEntity);
+    //    _mapperMock.Setup(m => m.Map<PersonEntity>(It.IsAny<PersonDto>())).Returns(personEntity);
     //    _personRepositoryMock.Setup(r => r.UpdateAsync(It.IsAny<PersonEntity>())).Returns(Task.CompletedTask);
 
     //    var result = await _personBusiness.Update(personEntity.Id, personDTO);
@@ -123,7 +123,7 @@ public class PersonBusinessTests
     //[Fact]
     //public async Task Update_NonExistingPerson_ReturnsNull()
     //{
-    //    var personDTO = new PersonDTO { /* insert valid properties */ };
+    //    var personDTO = new PersonDto { /* insert valid properties */ };
 
     //    var result = await _personBusiness.Update(123, personDTO);
 

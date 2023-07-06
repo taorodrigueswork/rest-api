@@ -15,5 +15,8 @@ public class ValidationFilterAttribute : IActionFilter
             context.Result = new UnprocessableEntityObjectResult(context.ModelState);
         }
     }
-    public void OnActionExecuted(ActionExecutedContext context) { }
+    public void OnActionExecuted(ActionExecutedContext context)
+    {
+        // Method intentionally left empty.
+    }
 }

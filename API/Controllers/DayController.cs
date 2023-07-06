@@ -9,14 +9,11 @@ namespace API.Controllers;
 [Route("api/[controller]")]
 public class DayController : ControllerBase
 {
-    private readonly IBusiness<DayDTO, DayEntity> _dayBusiness;
-    private readonly ILogger<DayController> _logger;
+    private readonly IBusiness<DayDto, DayEntity> _dayBusiness;
 
-
-    public DayController(IBusiness<DayDTO, DayEntity> dayBusiness, ILogger<DayController> logger)
+    public DayController(IBusiness<DayDto, DayEntity> dayBusiness)
     {
         _dayBusiness = dayBusiness;
-        _logger = logger;
     }
 
     /// <summary>
@@ -42,7 +39,7 @@ public class DayController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(DayEntity))]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     [ServiceFilter(typeof(ValidationFilterAttribute))]
-    public async Task<IActionResult> AddDayAsync([FromBody] DayDTO dayDTO)
+    public async Task<IActionResult> AddDayAsync([FromBody] DayDto dayDTO)
     {
         return dayDTO == null ? BadRequest("Day cannot be null") : Created(string.Empty, await _dayBusiness.Add(dayDTO));
     }
@@ -58,7 +55,7 @@ public class DayController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     [ServiceFilter(typeof(ValidationFilterAttribute))]
-    public async Task<IActionResult> UpdateDayAsync([FromHeader] int dayId, [FromBody] DayDTO dayDTO)
+    public async Task<IActionResult> UpdateDayAsync([FromHeader] int dayId, [FromBody] DayDto dayDTO)
     {
         var updatedDay = await _dayBusiness.Update(dayId, dayDTO);
 

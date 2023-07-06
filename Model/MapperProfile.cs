@@ -15,16 +15,16 @@ public class AutoMapperProfile : Profile
         // To Map from DTO List of Int to Entity List we need t o create a mapper between int and PersonEntity
         CreateMap<int, PersonEntity>().ForMember(dest => dest.Id, opts => opts.MapFrom(src => src));
 
-        CreateMap<PersonEntity, PersonDTO>().ReverseMap()
+        CreateMap<PersonEntity, PersonDto>().ReverseMap()
             .ForMember(source => source.Id, opts => opts.Ignore())
             .ForMember(source => source.Days, opts => opts.Ignore());
 
-        CreateMap<ScheduleEntity, ScheduleDTO>().ReverseMap()
+        CreateMap<ScheduleEntity, ScheduleDto>().ReverseMap()
     .ForMember(source => source.Id, opts => opts.Ignore())
     .ForMember(source => source.Name, opts => opts.MapFrom(src => src.Name))
     .ForMember(source => source.Created, opts => opts.Ignore());
 
-        CreateMap<DayEntity, DayDTO>().ReverseMap()
+        CreateMap<DayEntity, DayDto>().ReverseMap()
             .ForMember(source => source.Id, opts => opts.Ignore())
             .ForPath(source => source.Schedule.Id, opts => opts.MapFrom(src => src.ScheduleId));
 

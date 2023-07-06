@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using Persistence.Interfaces;
 
 namespace Business;
-public class PersonBusiness : IBusiness<PersonDTO, PersonEntity>
+public class PersonBusiness : IBusiness<PersonDto, PersonEntity>
 {
     private readonly IMapper _mapper;
     private readonly ILogger<PersonBusiness> _logger;
@@ -16,7 +16,7 @@ public class PersonBusiness : IBusiness<PersonDTO, PersonEntity>
         _personRepository = personRepository;
     }
 
-    public async Task<PersonEntity> Add(PersonDTO personDTO)
+    public async Task<PersonEntity> Add(PersonDto personDTO)
     {
         var person = await _personRepository.InsertAsync(_mapper.Map<PersonEntity>(personDTO));
 
@@ -25,7 +25,7 @@ public class PersonBusiness : IBusiness<PersonDTO, PersonEntity>
         return person;
     }
 
-    public async Task<PersonEntity> Delete(int id)
+    public async Task<PersonEntity?> Delete(int id)
     {
         var person = await _personRepository.FindByIdAsync(id);
 
@@ -44,19 +44,19 @@ public class PersonBusiness : IBusiness<PersonDTO, PersonEntity>
         return await _personRepository.FindByIdAsync(id);
     }
 
-    public async Task<PersonEntity> Update(int personId, PersonDTO personDTO)
+    public async Task<PersonEntity?> Update(int id, PersonDto personDTO)
     {
-        var person = await _personRepository.FindByIdAsync(personId);
+        var person = await _personRepository.FindByIdAsync(id);
 
         if (person == null)
         {
-            _logger.LogWarning($"The person with id {personId} was not found.");
+            _logger.LogWarning($"The person with id {id} was not found.");
             return person;
         }
 
         // Update person properties from DTO
         person = _mapper.Map<PersonEntity>(personDTO);
-        person.Id = personId;
+        person.Id = id;
 
         await _personRepository.UpdateAsync(person);
 

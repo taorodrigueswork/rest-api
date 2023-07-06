@@ -26,9 +26,6 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
-    // Using this as reference to split the configuration in multiple functions
-    // https://andrewlock.net/exploring-dotnet-6-part-12-upgrading-a-dotnet-5-startup-based-app-to-dotnet-6/
-    ConfigureConfiguration(builder.Configuration);
     ConfigureServices(builder.Services);
 
     Log.Information("Starting web host");
@@ -36,31 +33,8 @@ try
     var app = builder.Build();
 
     ConfigureMiddleware(app);
-    ConfigureEndpoints(app);
 
     app.Run();
-
-
-    void ConfigureConfiguration(ConfigurationManager configuration)
-    {
-        // Add Serilog to the application
-        // https://www.youtube.com/watch?v=0acSdHJfk64
-        // https://dotnetintellect.com/2020/09/06/logging-with-elasticsearch-kibana-serilog-using-asp-net-core-docker/
-        builder.Host.UseSerilog(new LoggerConfiguration()
-            .Enrich.FromLogContext()
-            .Enrich.WithMachineName()
-            .WriteTo.Console()
-            .WriteTo.Debug()
-            .WriteTo.Seq("http://localhost:5341")
-            //.WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(builder.Configuration["ElasticConfiguration:Uri"]))
-            //{
-            //    IndexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name!.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}",
-            //    AutoRegisterTemplate = true
-            //})
-            .Enrich.WithProperty("Environment", builder.Environment.EnvironmentName)
-            .ReadFrom.Configuration(builder.Configuration)
-            .CreateLogger());
-    }
 
     // Register your services/dependencies 
     void ConfigureServices(IServiceCollection services)
@@ -79,9 +53,9 @@ try
         services.AddScoped<IDayPersonRepository, DayPersonRepository>();
         services.AddScoped<IScheduleRepository, ScheduleRepository>();
 
-        services.AddScoped<IBusiness<PersonDTO, PersonEntity>, PersonBusiness>();
-        services.AddScoped<IBusiness<DayDTO, DayEntity>, DayBusiness>();
-        services.AddScoped<IBusiness<ScheduleDTO, ScheduleEntity>, ScheduleBusiness>();
+        services.AddScoped<IBusiness<PersonDto, PersonEntity>, PersonBusiness>();
+        services.AddScoped<IBusiness<DayDto, DayEntity>, DayBusiness>();
+        services.AddScoped<IBusiness<ScheduleDto, ScheduleEntity>, ScheduleBusiness>();
 
         // Invoking action filters to validate the model state for all entities received in POST and PUT requests
         // https://code-maze.com/aspnetcore-modelstate-validation-web-api/
@@ -93,6 +67,7 @@ try
         builder.Services.AddSwaggerGen();
         builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+        var serilogUrl = builder.Configuration.GetSection("Seq")["Url"];
         // Connect to the database using Azure Key Vault and Azure Managed Identity to retrieve the connection string
         if (builder.Environment.IsProduction())
         {
@@ -108,6 +83,8 @@ try
                 options.UseSqlServer(keyVaultClient.GetSecret("ConnectionStrings--SqlServer").Value.ToString())
                        .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
+
+            serilogUrl = keyVaultClient.GetSecret("Seq--Url").Value.ToString();
         }
 
         // Access the database using the local connection string is running locally
@@ -119,6 +96,24 @@ try
                        .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
         }
+
+        // Add Serilog to the application
+        // https://www.youtube.com/watch?v=0acSdHJfk64
+        // https://dotnetintellect.com/2020/09/06/logging-with-elasticsearch-kibana-serilog-using-asp-net-core-docker/
+        builder.Host.UseSerilog(new LoggerConfiguration()
+            .Enrich.FromLogContext()
+            .Enrich.WithMachineName()
+            .WriteTo.Console()
+            .WriteTo.Debug()
+            .WriteTo.Seq(serverUrl: serilogUrl!)
+            //.WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(builder.Configuration["ElasticConfiguration:Uri"]))
+            //{
+            //    IndexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name!.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}",
+            //    AutoRegisterTemplate = true
+            //})
+            .Enrich.WithProperty("Environment", builder.Environment.EnvironmentName)
+            .ReadFrom.Configuration(builder.Configuration)
+            .CreateLogger());
     }
 
     void ConfigureMiddleware(WebApplication app)
@@ -150,9 +145,6 @@ try
 
         app.MapControllers();
     }
-
-    void ConfigureEndpoints(IEndpointRouteBuilder app) { }
-
 }
 catch (Exception ex)
 {
