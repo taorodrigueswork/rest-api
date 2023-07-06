@@ -9,7 +9,7 @@ using Persistence.Context;
 
 #nullable disable
 
-namespace Entities.Migrations
+namespace Persistence.Migrations
 {
     [DbContext(typeof(ApiContext))]
     [Migration("20230626193350_CreateFirstEntities")]

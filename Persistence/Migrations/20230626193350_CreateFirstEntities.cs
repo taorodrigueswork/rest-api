@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Entities.Migrations
+namespace Persistence.Migrations
 {
     /// <inheritdoc />
     public partial class CreateFirstEntities : Migration

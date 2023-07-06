@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <CodeAnalysisRuleSet>..\API\.sonarlint\taorodrigueswork_rest-apicsharp.ruleset</CodeAnalysisRuleSet>
+    <ExcludeFromCodeCoverage>**/Migrations/**/*</ExcludeFromCodeCoverage>
   </PropertyGroup>
 
   <ItemGroup>
