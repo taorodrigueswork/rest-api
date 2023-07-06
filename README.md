@@ -1,5 +1,9 @@
 [![Build and Test](https://github.com/taorodrigueswork/rest-api/actions/workflows/dotnet.yml/badge.svg?branch=main)](https://github.com/taorodrigueswork/rest-api/actions/workflows/dotnet.yml)
-
+[![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=taorodrigueswork_rest-api&metric=alert_status)](https://sonarcloud.io/dashboard?id=taorodrigueswork_rest-api) 
+[![SonarCloud Coverage](https://sonarcloud.io/api/project_badges/measure?project=taorodrigueswork_rest-api&metric=coverage)](https://sonarcloud.io/component_measures/metric/coverage/list?id=taorodrigueswork_rest-api)
+[![SonarCloud Bugs](https://sonarcloud.io/api/project_badges/measure?project=taorodrigueswork_rest-api&metric=bugs)](https://sonarcloud.io/component_measures/metric/reliability_rating/list?id=taorodrigueswork_rest-api)
+[![SonarCloud Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=taorodrigueswork_rest-api&metric=vulnerabilities)](https://sonarcloud.io/component_measures/metric/security_rating/list?id=taorodrigueswork_rest-api)
+ 
 # REST API TEMPLATE WEB API .NET CORE 7 
 
 This is a template for building RESTful APIs using .NET 7. It is a monolith using multilayer architecture, and uses some common libraries and configurations very used in .Net projects.
