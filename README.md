@@ -28,6 +28,7 @@ This project uses the following technologies:
 - Seq or Elastic Search
 - Automapper
 - MSTest
+- AutoFixture (create random data for objects)
 - Swagger
 - Global Error Middleware
 - Repository Pattern
