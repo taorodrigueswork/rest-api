@@ -1,8 +1,15 @@
 [![Build and Test](https://github.com/taorodrigueswork/rest-api/actions/workflows/dotnet.yml/badge.svg?branch=main)](https://github.com/taorodrigueswork/rest-api/actions/workflows/dotnet.yml)
-[![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=taorodrigueswork_rest-api&metric=alert_status)](https://sonarcloud.io/dashboard?id=taorodrigueswork_rest-api) 
-[![SonarCloud Coverage](https://sonarcloud.io/api/project_badges/measure?project=taorodrigueswork_rest-api&metric=coverage)](https://sonarcloud.io/component_measures/metric/coverage/list?id=taorodrigueswork_rest-api)
-[![SonarCloud Bugs](https://sonarcloud.io/api/project_badges/measure?project=taorodrigueswork_rest-api&metric=bugs)](https://sonarcloud.io/component_measures/metric/reliability_rating/list?id=taorodrigueswork_rest-api)
-[![SonarCloud Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=taorodrigueswork_rest-api&metric=vulnerabilities)](https://sonarcloud.io/component_measures/metric/security_rating/list?id=taorodrigueswork_rest-api)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=taorodrigueswork_rest-api&metric=bugs)](https://sonarcloud.io/dashboard?id=taorodrigueswork_rest-api)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=taorodrigueswork_rest-api&metric=code_smells)](https://sonarcloud.io/dashboard?id=taorodrigueswork_rest-api)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=taorodrigueswork_rest-api&metric=coverage)](https://sonarcloud.io/dashboard?id=taorodrigueswork_rest-api)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=taorodrigueswork_rest-api&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=taorodrigueswork_rest-api)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=taorodrigueswork_rest-api&metric=ncloc)](https://sonarcloud.io/dashboard?id=taorodrigueswork_rest-api)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=taorodrigueswork_rest-api&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=taorodrigueswork_rest-api)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=taorodrigueswork_rest-api&metric=alert_status)](https://sonarcloud.io/dashboard?id=taorodrigueswork_rest-api)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=taorodrigueswork_rest-api&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=taorodrigueswork_rest-api)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=taorodrigueswork_rest-api&metric=security_rating)](https://sonarcloud.io/dashboard?id=taorodrigueswork_rest-api)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=taorodrigueswork_rest-api&metric=sqale_index)](https://sonarcloud.io/dashboard?id=taorodrigueswork_rest-api)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=taorodrigueswork_rest-api&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=taorodrigueswork_rest-api)
  
 # REST API TEMPLATE .NET CORE 7 
 
