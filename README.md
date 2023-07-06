@@ -27,8 +27,7 @@ This project uses the following technologies:
 - Serilog
 - Seq or Elastic Search
 - Automapper
-- MSTest
-- AutoFixture (create random data for objects)
+- MSTest, [AutoFixture]([docs/CONTRIBUTING.md](https://docs.educationsmediagroup.com/unit-testing-csharp/autofixture/quick-glance-at-autofixture), and ByteStudio.AutoFixture [ByteStudio.AutoFixture](https://libraries.io/nuget/ByteStudio.AutoFixture.MSTest1)
 - Swagger
 - Global Error Middleware
 - Repository Pattern
