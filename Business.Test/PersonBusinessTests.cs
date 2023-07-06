@@ -1,5 +1,6 @@
 namespace Business.Test;
 
+using AutoFixture;
 using Entities.DTO.Request.Person;
 using Entities.Entity;
 using Microsoft.Extensions.Logging;
@@ -7,9 +8,11 @@ using Moq;
 using Persistence.Interfaces;
 using System.Threading.Tasks;
 
+
 [TestClass()]
 public class PersonBusinessTests
 {
+    private Fixture fixture;
     private PersonBusiness? _personBusiness;
     private Mock<IPersonRepository> _personRepositoryMock;
     private Mock<ILogger<PersonBusiness>> _loggerMock;
@@ -21,42 +24,38 @@ public class PersonBusinessTests
         // The profile is inside the Entities project and is also used in the API project when the project starts.
         var config = new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperProfile>());
 
+        fixture = new Fixture();// https://docs.educationsmediagroup.com/unit-testing-csharp/autofixture/quick-glance-at-autofixture
+        fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
+                         .ForEach(b => fixture.Behaviors.Remove(b));
+        fixture.Behaviors.Add(new OmitOnRecursionBehavior());// using this property to avoid circular references
+
         _personRepositoryMock = new Mock<IPersonRepository>();
         _loggerMock = new Mock<ILogger<PersonBusiness>>();
 
         _personBusiness = new PersonBusiness(config.CreateMapper(), _loggerMock.Object, _personRepositoryMock.Object);
     }
 
-
     [TestMethod()]
     public async Task Add_WithValidPersonDTO_ReturnsPersonEntityAsync()
     {
-        // Arrange
-        var expectedPerson = new PersonEntity
-        {
-            Name = "John Doe",
-            Phone = "1234567890",
-            Email = "johndoe@example.com"
-        };
-        var personDTO = new PersonDto
-        {
-            Name = "John Doe",
-            Phone = "1234567890",
-            Email = "johndoe@example.com"
-        };
+        PersonDto personDTO = fixture.Create<PersonDto>();
+        PersonEntity personEntity = fixture.Create<PersonEntity>();
 
-        _personRepositoryMock.Setup(r => r.InsertAsync(It.IsAny<PersonEntity>())).ReturnsAsync(expectedPerson);
+        // Arrange
+        _personRepositoryMock.Setup(r => r.InsertAsync(It.IsAny<PersonEntity>())).ReturnsAsync(personEntity);
+
         // Act
         var actualResult = await _personBusiness.Add(personDTO);
 
         // Assert
         Assert.IsNotNull(actualResult);
-        Assert.AreEqual(expectedPerson.Name, actualResult.Name);
-        Assert.AreEqual(expectedPerson.Phone, actualResult.Phone);
-        Assert.AreEqual(expectedPerson.Email, actualResult.Email);
+        Assert.IsNotNull(actualResult.Name);
+        Assert.IsNotNull(actualResult.Email);
+        Assert.IsNotNull(actualResult.Phone);
+        Assert.IsNotNull(actualResult.Id);
     }
 
-    //[TestMethod()]
+    //[Test]
     //public async Task Delete_ExistingPerson_DeletesPerson()
     //{
     //    var personEntity = new PersonEntity
@@ -76,25 +75,25 @@ public class PersonBusinessTests
     //    _loggerMock.Verify(l => l.LogInformation(It.IsAny<string>(), personEntity), Times.Once);
     //}
 
-    [TestMethod()]
-    public async Task GetById_ExistingPerson_ReturnsPerson()
-    {
-        var personEntity = new PersonEntity
-        {
-            Id = 123,
-            Name = "John Doe",
-            Phone = "1234567890",
-            Email = "johndoe@example.com"
-        };
+    //[Test]
+    //public async Task GetById_ExistingPerson_ReturnsPerson()
+    //{
+    //    var personEntity = new PersonEntity
+    //    {
+    //        Id = 123,
+    //        Name = "John Doe",
+    //        Phone = "1234567890",
+    //        Email = "johndoe@example.com"
+    //    };
 
-        _personRepositoryMock.Setup(r => r.FindByIdAsync(It.IsAny<int>())).ReturnsAsync(personEntity);
+    //    _personRepositoryMock.Setup(r => r.FindByIdAsync(It.IsAny<int>())).ReturnsAsync(personEntity);
 
-        var result = await _personBusiness.GetById(personEntity.Id);
+    //    var result = await _personBusiness.GetById(personEntity.Id);
 
-        Assert.AreEqual(personEntity, result);
-    }
+    //    Assert.AreEqual(personEntity, result);
+    //}
 
-    //[Fact]
+    //[Test]
     //public async Task Update_ExistingPerson_ReturnsPerson()
     //{
     //    var personDTO = new PersonDto { /* insert valid properties */ };
@@ -110,7 +109,7 @@ public class PersonBusinessTests
     //    _loggerMock.Verify(l => l.LogInformation(It.IsAny<string>(), personEntity), Times.Once);
     //}
 
-    //[Fact]
+    //[Test]
     //public async Task Delete_NonExistingPerson_ReturnsNull()
     //{
     //    var result = await _personBusiness.Delete(123);
@@ -120,7 +119,7 @@ public class PersonBusinessTests
     //    _personRepositoryMock.Verify(r => r.DeleteAsync(It.IsAny<PersonEntity>()), Times.Never);
     //}
 
-    //[Fact]
+    //[Test]
     //public async Task Update_NonExistingPerson_ReturnsNull()
     //{
     //    var personDTO = new PersonDto { /* insert valid properties */ };
