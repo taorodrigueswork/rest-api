@@ -34,8 +34,10 @@ public class PersonBusiness : IBusiness<PersonDto, PersonEntity>
             _logger.LogInformation($"Deleted person.", person);
             await _personRepository.DeleteAsync(person);
         }
-
-        _logger.LogWarning($"The person with id {id} was not found.");
+        else
+        {
+            _logger.LogWarning($"The person with id {id} was not found.");
+        }
         return person;
     }
 
