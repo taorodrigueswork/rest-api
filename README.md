@@ -57,7 +57,7 @@ This project uses the following technologies:
   - `Entities.Test`: This folder contains the entity tests using MSTest.
 	- `MappingProfileTests`: It tests if all the properties are mapped correctly. Not a single property should be ignored. Helps to avoid mistakes when mapping entities and DTOs.
   - `Business.Test`: This folder contains the business tests using MSTest.
-	- 
+	
 ## Components
 
 ### Web API Project
