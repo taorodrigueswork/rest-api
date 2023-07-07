@@ -44,20 +44,20 @@ This project uses the following technologies:
   - `ValidationFilterAttribute.cs`:  Validates DTO required properties.
 - `Business`: This folder contains the business logic components.
   - `IBusiness`: This folder contains the interfaces for the business logic components.
-- `Business.Test`: This folder contains the business tests using MSTest.
 - `Entities`: This folder contains the entity models.
   - `DTO`: This folder contains the data transfer objects (DTOs) used for request and response payloads.
   - `Entity`: This folder contains the database entities. There is a many-to-many relationship example with an explicit class to handle it. There is also a BaseEntity class with a generic validate method for the entities.
   - `MapperProfile`: This file contains the AutoMapper mappings profile between DTOs and entity models.
-- `Entities.Test`: This folder contains the entity tests using MSTest.
-  - `MappingProfileTests`: It tests if all the properties are mapped correctly. Not a single property should be ignored. Helps to avoid mistakes when mapping entities and DTOs.
 - `Persistence`: This folder contains the data access layer components, using Entity Framework Core ORM.
   - `Context`: It has an ApiContext that inherits from DbContext, which is a class provided by Entity Framework Core that represents a session with the database and allows you to query and save instances of your entity classes.
   - `Migrations`: Contain all migration files defining the changes to the model that should be applied to the database.
   - `Repository`: This folder contains the repository classes that handle database operations.
   - `IRepository`: This folder contains the interfaces for the repository classes.
-- `Persistence.Test`: This folder contains the repository tests using MSTest and SQL in memory.
-
+- `Tests`: 
+  - `Entities.Test`: This folder contains the entity tests using MSTest.
+	- `MappingProfileTests`: It tests if all the properties are mapped correctly. Not a single property should be ignored. Helps to avoid mistakes when mapping entities and DTOs.
+  - `Business.Test`: This folder contains the business tests using MSTest.
+	- 
 ## Components
 
 ### Web API Project
