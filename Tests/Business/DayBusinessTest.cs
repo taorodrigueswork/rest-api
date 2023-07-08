@@ -1,7 +1,6 @@
 ﻿using Business;
 using Entities.DTO.Request.Day;
 using Persistence.Interfaces;
-using Persistence.Interfaces.GenericRepository;
 namespace Tests.Business;
 
 [TestClass()]
@@ -12,7 +11,7 @@ public class DayBusinessTest
     private Mock<IDayRepository> _dayRepositoryMock;
     private Mock<IPersonRepository> _personRepositoryMock;
     private Mock<IScheduleRepository> _scheduleRepositoryMock;
-    private Mock<IGenericRepository<DayPersonEntity>> _dayPersonRepositoryMock;
+    private Mock<IDayPersonRepository> _dayPersonRepositoryMock;
     private Mock<ILogger<DayBusiness>> _loggerMock;
     private DayBusiness _dayBusiness;
 
@@ -32,7 +31,7 @@ public class DayBusinessTest
         _dayRepositoryMock = new Mock<IDayRepository>();
         _personRepositoryMock = new Mock<IPersonRepository>();
         _scheduleRepositoryMock = new Mock<IScheduleRepository>();
-        _dayPersonRepositoryMock = new Mock<IGenericRepository<DayPersonEntity>>();
+        _dayPersonRepositoryMock = new Mock<IDayPersonRepository>();
 
         // ILogger mock setup
         _loggerMock = new Mock<ILogger<DayBusiness>>();
@@ -124,7 +123,7 @@ public class DayBusinessTest
 
         _dayRepositoryMock.Setup(repo => repo.GetDayWithSubclassesAsync(dayId)).ReturnsAsync(dayEntity);
         _scheduleRepositoryMock.Setup(repo => repo.FindByIdAsync(dayDto.ScheduleId)).ReturnsAsync(dayEntity.Schedule);
-        _dayPersonRepositoryMock.Setup(repo => repo.DeleteAsync(It.IsAny<DayPersonEntity>(), null)).Returns(Task.CompletedTask);
+        _dayPersonRepositoryMock.Setup(repo => repo.DeleteByDayIdAsync(It.IsAny<int>())).Returns(Task.CompletedTask);
         _dayPersonRepositoryMock.Setup(repo => repo.UpdateAsync(It.IsAny<DayPersonEntity>(), null)).Returns(Task.CompletedTask);
         _personRepositoryMock.Setup(repo => repo.GetPeopleAsync(It.IsAny<List<int>>())).ReturnsAsync(listPersonEntity);
 
@@ -139,7 +138,7 @@ public class DayBusinessTest
         Assert.AreEqual(3, updatedDay.People.Count);
 
         _dayRepositoryMock.Verify(p => p.GetDayWithSubclassesAsync(It.IsAny<int>()), Times.Once);
-        _dayPersonRepositoryMock.Verify(p => p.DeleteAsync(It.IsAny<DayPersonEntity>(), null), Times.AtLeast(3));
+        _dayPersonRepositoryMock.Verify(p => p.DeleteByDayIdAsync(It.IsAny<int>()), Times.Once);
         _scheduleRepositoryMock.Verify(p => p.FindByIdAsync(It.IsAny<int>()), Times.Once);
         _personRepositoryMock.Verify(p => p.GetPeopleAsync(It.IsAny<List<int>>()), Times.Once);
 
@@ -148,6 +147,7 @@ public class DayBusinessTest
     }
 
     [TestMethod]
+    [ExpectedException(typeof(ArgumentNullException))]
     public async Task Update_Should_LogWarning_When_DayNotFound()
     {
         // Arrange
@@ -157,11 +157,7 @@ public class DayBusinessTest
         _dayRepositoryMock.Setup(repo => repo.GetDayWithSubclassesAsync(dayId)).ReturnsAsync(dayEntity);
 
         // Act
-        var updatedDay = await _dayBusiness.Update(dayId, It.IsAny<DayDto>());
-
-        // Assert
-        Assert.AreEqual(1, _loggerMock.Invocations.Count);
-        Assert.AreEqual(LogLevel.Warning, _loggerMock.Invocations[0].Arguments[0]);
+        await _dayBusiness.Update(dayId, It.IsAny<DayDto>());
     }
 
     [TestMethod]

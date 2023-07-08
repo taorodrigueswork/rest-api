@@ -1,7 +1,6 @@
 ﻿using Entities.DTO.Request.Day;
 using Microsoft.Extensions.Logging;
 using Persistence.Interfaces;
-using Persistence.Interfaces.GenericRepository;
 
 namespace Business;
 public class DayBusiness : IBusiness<DayDto, DayEntity>
@@ -11,13 +10,13 @@ public class DayBusiness : IBusiness<DayDto, DayEntity>
     private readonly IDayRepository _dayRepository;
     private readonly IPersonRepository _personRepository;
     private readonly IScheduleRepository _scheduleRepository;
-    private readonly IGenericRepository<DayPersonEntity> _dayPersonRepository;
+    private readonly IDayPersonRepository _dayPersonRepository;
     public DayBusiness(IMapper mapper,
         ILogger<DayBusiness> logger,
         IDayRepository dayRepository,
         IPersonRepository personRepository,
         IScheduleRepository scheduleRepository,
-        IGenericRepository<DayPersonEntity> dayPersonRepository)
+        IDayPersonRepository dayPersonRepository)
     {
         _mapper = mapper;
         _logger = logger;
@@ -55,26 +54,20 @@ public class DayBusiness : IBusiness<DayDto, DayEntity>
     {
         var day = await _dayRepository.GetDayWithSubclassesAsync(id);
 
-        if (day == null)
-        {
-            _logger.LogWarning($"The day with id {id} was not found.");
-            return day;
-        }
+        ArgumentNullException.ThrowIfNull(day, $"The day with id {id} was not found.");
 
-        // Delete all people from the day many to many relationship
-        foreach (var person in day.People)
-        {
-            await _dayPersonRepository.DeleteAsync(new DayPersonEntity
-            {
-                DayId = id,
-                PersonId = person.Id
-            });
-        }
+        // Delete all people from the day many-to-many relationship using a single query
+        await _dayPersonRepository.DeleteByDayIdAsync(id);
+
+        // Fetch only the required people from the database using their IDs
+        var people = await _personRepository.GetPeopleAsync(entity.People);
 
         day.Day = entity.Day;
         day.Schedule = await _scheduleRepository.FindByIdAsync(entity.ScheduleId);
+
+        // Assign the fetched people to the day
         day.People.Clear();// Clear the old list of people in the memory
-        day.People = await _personRepository.GetPeopleAsync(entity.People);// Recover the new list of people from the database
+        day.People.AddRange(people);
 
         await _dayRepository.UpdateAsync(day);
 
