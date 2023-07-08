@@ -35,6 +35,12 @@ This project uses the following technologies:
 - Sonar Cloud
 - Coverlet
 
+## Project Design
+
+This project has classes representing one-to-many and many-to-many relationships, based on the database diagram below. A schedule has a list of days (one-to-many), which also can have a list of person, and each person can belong to multiple days (many-to-many).
+
+![image](https://github.com/taorodrigueswork/rest-api/assets/135357085/7a48f8a5-9510-412f-9ccf-cef0bae0c7c3)
+
 ## Project Structure
 
 - `API`: This folder contains the source code for the web API.
