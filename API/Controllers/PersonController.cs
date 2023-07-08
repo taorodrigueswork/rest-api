@@ -72,7 +72,8 @@ public class PersonController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeletePersonAsync(int id)
     {
-        return await _personBusiness.Delete(id) == null ? NotFound() : NoContent();
+        await _personBusiness.Delete(id);
+        return NoContent();
     }
 
 }

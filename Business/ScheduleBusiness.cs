@@ -23,7 +23,7 @@ public class ScheduleBusiness : IBusiness<ScheduleDto, ScheduleEntity>
         throw new NotImplementedException();
     }
 
-    public Task<ScheduleEntity?> Delete(int id)
+    public Task Delete(int id)
     {
         throw new NotImplementedException();
     }

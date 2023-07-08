@@ -65,11 +65,9 @@ public class PersonBusinessTests
         _personRepositoryMock.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(personEntity);
 
         // Act
-        var result = await _personBusiness.Delete(id);
+        await _personBusiness.Delete(id);
 
         // Assert
-        Assert.IsNotNull(result);
-        Assert.AreEqual(result, personEntity);
         Assert.AreEqual(1, _loggerMock.Invocations.Count);
         Assert.AreEqual(LogLevel.Information, _loggerMock.Invocations[0].Arguments[0]);
         _personRepositoryMock.Verify(p => p.DeleteAsync(It.IsAny<PersonEntity>(), null), Times.Once);
@@ -77,7 +75,8 @@ public class PersonBusinessTests
     }
 
     [TestMethod]
-    public async Task Delete_NotFound_ReturnsNullAsync()
+    [ExpectedException(typeof(ArgumentNullException))]
+    public async Task Delete_NotFound_Throws_Exception_Async()
     {
         // Arrange
         var id = _fixture.Create<int>();
@@ -86,13 +85,7 @@ public class PersonBusinessTests
         _personRepositoryMock.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(personEntity);
 
         // Act
-        var result = await _personBusiness.Delete(id);
-
-        // Assert
-        Assert.IsNull(result);
-        Assert.AreEqual(1, _loggerMock.Invocations.Count);
-        Assert.AreEqual(LogLevel.Warning, _loggerMock.Invocations[0].Arguments[0]);
-        _personRepositoryMock.Verify(p => p.FindByIdAsync(It.IsAny<int>()), Times.Once);
+        await _personBusiness.Delete(id);
     }
 
     [TestMethod]

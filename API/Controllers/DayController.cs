@@ -70,6 +70,7 @@ public class DayController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteDayAsync(int id)
     {
-        return await _dayBusiness.Delete(id) == null ? NotFound() : NoContent();
+        await _dayBusiness.Delete(id);
+        return NoContent();
     }
 }

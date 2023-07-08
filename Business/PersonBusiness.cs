@@ -25,20 +25,14 @@ public class PersonBusiness : IBusiness<PersonDto, PersonEntity>
         return person;
     }
 
-    public async Task<PersonEntity?> Delete(int id)
+    public async Task Delete(int id)
     {
         var person = await _personRepository.FindByIdAsync(id);
 
-        if (person != null)
-        {
-            _logger.LogInformation($"Deleted person.", person);
-            await _personRepository.DeleteAsync(person);
-        }
-        else
-        {
-            _logger.LogWarning($"The person with id {id} was not found.");
-        }
-        return person;
+        ArgumentNullException.ThrowIfNull(person, $"The person with id {id} was not found.");
+
+        _logger.LogInformation($"Deleted person.", person);
+        await _personRepository.DeleteAsync(person);
     }
 
     public async Task<PersonEntity> GetById(int id)

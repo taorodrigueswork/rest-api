@@ -71,11 +71,9 @@ public class DayBusinessTest
         _dayRepositoryMock.Setup(repo => repo.DeleteAsync(It.IsAny<DayEntity>(), null)).Returns(Task.CompletedTask);
 
         // Act
-        var deletedDay = await _dayBusiness.Delete(dayId);
+        await _dayBusiness.Delete(dayId);
 
         // Assert
-        Assert.IsNotNull(deletedDay);
-        Assert.AreEqual(deletedDay, dayEntity);
         _dayRepositoryMock.Verify(p => p.DeleteAsync(It.IsAny<DayEntity>(), null), Times.Once);
         _dayRepositoryMock.Verify(p => p.FindByIdAsync(It.IsAny<int>()), Times.Once);
         Assert.AreEqual(1, _loggerMock.Invocations.Count);
@@ -83,7 +81,8 @@ public class DayBusinessTest
     }
 
     [TestMethod]
-    public async Task Delete_NullDay_Async()
+    [ExpectedException(typeof(ArgumentNullException))]
+    public async Task Delete_NullDay_Throws_Exception_Async()
     {
         // Arrange
         var dayId = _fixture.Create<int>();
@@ -92,13 +91,7 @@ public class DayBusinessTest
         _dayRepositoryMock.Setup(repo => repo.FindByIdAsync(dayId)).ReturnsAsync(dayEntity);
 
         // Act
-        var deletedDay = await _dayBusiness.Delete(dayId);
-
-        // Assert
-        Assert.IsNull(deletedDay);
-        _dayRepositoryMock.Verify(p => p.FindByIdAsync(It.IsAny<int>()), Times.Once);
-        Assert.AreEqual(1, _loggerMock.Invocations.Count);
-        Assert.AreEqual(LogLevel.Warning, _loggerMock.Invocations[0].Arguments[0]);
+        await _dayBusiness.Delete(dayId);
     }
 
     [TestMethod]

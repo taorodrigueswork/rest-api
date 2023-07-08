@@ -36,20 +36,14 @@ public class DayBusiness : IBusiness<DayDto, DayEntity>
         return day;
     }
 
-    public async Task<DayEntity?> Delete(int id)
+    public async Task Delete(int id)
     {
         var day = await _dayRepository.FindByIdAsync(id);
 
-        if (day != null)
-        {
-            _logger.LogInformation($"Deleted day.", day);
-            await _dayRepository.DeleteAsync(day);
-        }
-        else
-        {
-            _logger.LogWarning($"The day with id {id} was not found.");
-        }
-        return day;
+        ArgumentNullException.ThrowIfNull(day, $"The day with id {id} was not found.");
+
+        _logger.LogInformation($"Deleted day.", day);
+        await _dayRepository.DeleteAsync(day);
     }
 
     public async Task<DayEntity> GetById(int id)
