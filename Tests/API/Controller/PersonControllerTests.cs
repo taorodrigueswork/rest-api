@@ -21,6 +21,7 @@ public class PersonControllerTests
                          .ForEach(b => _fixture.Behaviors.Remove(b));
         _fixture.Behaviors.Add(new OmitOnRecursionBehavior());
 
+        // AutoMapperMock setup
         var mapperConfig = new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperProfile>());
         _mapper = mapperConfig.CreateMapper();
 
@@ -146,21 +147,5 @@ public class PersonControllerTests
         //Assert
         Assert.IsInstanceOfType(result, typeof(NoContentResult));
         _personBusinessMock.Verify(b => b.Delete(id), Times.Once);
-    }
-
-    [TestMethod]
-    [Ignore("This test is gonna be implemented in the ValidationFilterAttribute")]
-    public async Task DeletePerson_InvalidPerson_ReturnsNotFoundResult()
-    {
-        // Arrange
-        //int id = -1;
-        //_personBusinessMock.Setup(x => x.Delete(id)).ThrowsAsync(new Exception(ErrorResponse));
-
-        // Act
-        //var response = await controller.DeletePersonAsync(id);
-
-        // Assert
-        //Assert.IsNotNull(response);
-        //Assert.AreEqual((int)HttpStatusCode.NotFound, response.StatusCode);
     }
 }

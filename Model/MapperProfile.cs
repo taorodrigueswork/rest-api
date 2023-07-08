@@ -4,8 +4,11 @@ using Entities.DTO.Request.Day;
 using Entities.DTO.Request.Person;
 using Entities.DTO.Request.Schedule;
 using Entities.Entity;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Entities;
+
+[ExcludeFromCodeCoverage]
 public class AutoMapperProfile : Profile
 {
     public AutoMapperProfile()

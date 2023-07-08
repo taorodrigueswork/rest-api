@@ -57,21 +57,11 @@ public class ExceptionHandlingMiddleware
                 break;
         }
 
-        var errorResponse = new ErrorResponse
-        {
-            Success = false,
-            Message = $"""{exception}, "ErrorHandlingMiddleware" | [Method]: "HandleExceptionAsync" | Error: {exception.Message} Headers: {context.Request.Headers}. Query: {context.Request.Query}. Path: {context.Request.Path}. Body: {context.Request.Body}"""
-        };
+        var logMessage = $"""{exception}, "ErrorHandlingMiddleware" | [Method]: "HandleExceptionAsync" | Error: {exception.Message} Headers: {context.Request.Headers}. Query: {context.Request.Query}. Path: {context.Request.Path}. Body: {context.Request.Body}""";
 
-        _logger.LogError(errorResponse.Message);
+        _logger.LogError(logMessage);
 
-        var result = JsonSerializer.Serialize(errorResponse);
+        var result = JsonSerializer.Serialize(exception.Message);
         await context.Response.WriteAsync(result);
     }
-}
-
-internal class ErrorResponse
-{
-    public bool Success { get; set; }
-    public string Message { get; set; }
 }
