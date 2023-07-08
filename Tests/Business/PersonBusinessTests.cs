@@ -127,6 +127,7 @@ public class PersonBusinessTests
     }
 
     [TestMethod]
+    [ExpectedException(typeof(ArgumentNullException))]
     public async Task Update_NotFound_ReturnsNullAsync()
     {
         // Arrange
@@ -137,11 +138,6 @@ public class PersonBusinessTests
         _personRepositoryMock.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(personEntity);
 
         // Act
-        var result = await _personBusiness.Update(id, personDto);
-
-        // Assert
-        _personRepositoryMock.Verify(p => p.UpdateAsync(It.IsAny<PersonEntity>(), null), Times.Never);
-        Assert.IsNull(result);
-        Assert.AreEqual(LogLevel.Warning, _loggerMock.Invocations[0].Arguments[0]);
+        await _personBusiness.Update(id, personDto);
     }
 }

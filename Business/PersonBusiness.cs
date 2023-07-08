@@ -44,11 +44,7 @@ public class PersonBusiness : IBusiness<PersonDto, PersonEntity>
     {
         var person = await _personRepository.FindByIdAsync(id);
 
-        if (person == null)
-        {
-            _logger.LogWarning($"The person with id {id} was not found.");
-            return person;
-        }
+        ArgumentNullException.ThrowIfNull(person, $"The person with id {id} was not found.");
 
         // Update person properties from DTO
         person = _mapper.Map<PersonEntity>(personDTO);
