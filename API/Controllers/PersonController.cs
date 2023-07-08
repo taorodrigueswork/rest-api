@@ -21,7 +21,7 @@ public class PersonController : ControllerBase
     /// <summary>
     /// Gets a person by their ID.
     /// </summary>
-    /// <param name="personId">The ID of the person to get.</param>
+    /// <param name="id">The ID of the person to get.</param>
     /// <returns>An IActionResult representing the status of the operation with the details of the requested entity.</returns>
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PersonEntity))]
@@ -35,7 +35,7 @@ public class PersonController : ControllerBase
     /// <summary>
     /// Adds a new person.
     /// </summary>
-    /// <param name="user">The Person object to add.</param>
+    /// <param name="personDTO">The Person object to add.</param>
     /// <returns>An IActionResult representing the status of the operation with the details of the new entity created.</returns>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(PersonEntity))]
@@ -49,24 +49,24 @@ public class PersonController : ControllerBase
     /// <summary>
     /// Updates an existing Person.
     /// </summary>
-    /// <param name="personId">The ID of the Person to update, passed in a header.</param>
+    /// <param name="id">The ID of the Person to update, passed in a header.</param>
     /// <param name="personDTO">The updated Person object.</param>
     /// <returns>An IActionResult representing the status of the operation with the details of the updated entity.</returns>
-    [HttpPut]
+    [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PersonEntity))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     [ServiceFilter(typeof(ValidationFilterAttribute))]
-    public async Task<IActionResult> UpdatePersonAsync([FromHeader] int personId, [FromBody] PersonDto personDTO)
+    public async Task<IActionResult> UpdatePersonAsync(int id, [FromBody] PersonDto personDTO)
     {
-        var updatedPerson = await _personBusiness.Update(personId, personDTO);
+        var updatedPerson = await _personBusiness.Update(id, personDTO);
 
         return updatedPerson == null ? NotFound() : Ok(updatedPerson);
     }
     /// <summary>
     /// Deletes a person with the specified ID.
     /// </summary>
-    /// <param name="personId">The ID of the person to delete.</param>
+    /// <param name="id">The ID of the person to delete.</param>
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
