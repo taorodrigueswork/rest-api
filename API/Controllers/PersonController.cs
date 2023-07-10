@@ -6,9 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
 [Produces("application/json")]
 [Consumes("application/json")]
+[ApiVersion("1.0")]
 public class PersonController : ControllerBase
 {
     private readonly IBusiness<PersonDto, PersonEntity> _personBusiness;

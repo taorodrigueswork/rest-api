@@ -6,7 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
+[Produces("application/json")]
+[Consumes("application/json")]
+[ApiVersion("1.0")]
 public class DayController : ControllerBase
 {
     private readonly IBusiness<DayDto, DayEntity> _dayBusiness;
