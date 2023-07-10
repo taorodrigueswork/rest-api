@@ -41,14 +41,12 @@ public class DayBusiness : IBusiness<DayDto, DayEntity>
 
         ArgumentNullException.ThrowIfNull(day, $"The day with id {id} was not found.");
 
-        _logger.LogInformation($"Deleted day.", day);
         await _dayRepository.DeleteAsync(day);
+
+        _logger.LogInformation($"Deleted day.", day);
     }
 
-    public async Task<DayEntity> GetById(int id)
-    {
-        return await _dayRepository.FindByIdAsync(id);
-    }
+    public async Task<DayEntity> GetById(int id) => await _dayRepository.GetDayWithSubclassesAsync(id);
 
     public async Task<DayEntity?> Update(int id, DayDto entity)
     {
