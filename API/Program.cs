@@ -186,4 +186,5 @@ finally
 }
 
 // Created to support this class to be used for integration tests purpose
+[ExcludeFromCodeCoverage]
 public partial class Program { }
