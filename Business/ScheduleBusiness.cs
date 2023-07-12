@@ -40,7 +40,7 @@ public class ScheduleBusiness : IBusiness<ScheduleDto, ScheduleEntity>
         _logger.LogInformation($"Deleted schedule.", schedule);
     }
 
-    public async Task<ScheduleEntity> GetById(int id) => await _scheduleRepository.GetByIdWithSubclassesAsync(id);
+    public async Task<ScheduleEntity?> GetById(int id) => await _scheduleRepository.GetByIdWithSubclassesAsync(id);
 
     public async Task<ScheduleEntity?> Update(int id, ScheduleDto scheduleDto)
     {

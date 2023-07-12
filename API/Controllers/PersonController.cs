@@ -36,15 +36,15 @@ public class PersonController : ControllerBase
     /// <summary>
     /// Adds a new person.
     /// </summary>
-    /// <param name="personDTO">The Person object to add.</param>
+    /// <param name="personDto">The Person object to add.</param>
     /// <returns>An IActionResult representing the status of the operation with the details of the new entity created.</returns>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(PersonEntity))]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     [ServiceFilter(typeof(ValidationFilterAttribute))]
-    public async Task<IActionResult> AddPersonAsync([FromBody] PersonDto personDTO)
+    public async Task<IActionResult> AddPersonAsync([FromBody] PersonDto personDto)
     {
-        return personDTO == null ? BadRequest("Person cannot be null") : Created(string.Empty, await _personBusiness.Add(personDTO));
+        return personDto == null ? BadRequest("Person cannot be null") : Created(string.Empty, await _personBusiness.Add(personDto));
     }
 
     /// <summary>

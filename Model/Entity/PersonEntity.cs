@@ -7,7 +7,6 @@ namespace Entities.Entity;
 [ExcludeFromCodeCoverage]
 public class PersonEntity
 {
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     [Required]

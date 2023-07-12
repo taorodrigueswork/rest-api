@@ -46,7 +46,7 @@ public class DayBusiness : IBusiness<DayDto, DayEntity>
         _logger.LogInformation($"Deleted day.", day);
     }
 
-    public async Task<DayEntity> GetById(int id) => await _dayRepository.GetDayWithSubclassesAsync(id);
+    public async Task<DayEntity?> GetById(int id) => await _dayRepository.GetDayWithSubclassesAsync(id);
 
     public async Task<DayEntity?> Update(int id, DayDto entity)
     {

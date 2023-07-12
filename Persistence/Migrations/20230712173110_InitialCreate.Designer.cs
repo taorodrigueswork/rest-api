@@ -12,20 +12,20 @@ using Persistence.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20230626193350_CreateFirstEntities")]
-    partial class CreateFirstEntities
+    [Migration("20230712173110_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.8")
+                .HasAnnotation("ProductVersion", "7.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Persistence.Entities.DayEntity", b =>
+            modelBuilder.Entity("Entities.Entity.DayEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -46,7 +46,7 @@ namespace Persistence.Migrations
                     b.ToTable("Day");
                 });
 
-            modelBuilder.Entity("Persistence.Entities.DayPersonEntity", b =>
+            modelBuilder.Entity("Entities.Entity.DayPersonEntity", b =>
                 {
                     b.Property<int>("DayId")
                         .HasColumnType("int");
@@ -61,7 +61,7 @@ namespace Persistence.Migrations
                     b.ToTable("DayPerson");
                 });
 
-            modelBuilder.Entity("Persistence.Entities.PersonEntity", b =>
+            modelBuilder.Entity("Entities.Entity.PersonEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -86,7 +86,7 @@ namespace Persistence.Migrations
                     b.ToTable("Person");
                 });
 
-            modelBuilder.Entity("Persistence.Entities.ScheduleEntity", b =>
+            modelBuilder.Entity("Entities.Entity.ScheduleEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -106,9 +106,9 @@ namespace Persistence.Migrations
                     b.ToTable("Schedule");
                 });
 
-            modelBuilder.Entity("Persistence.Entities.DayEntity", b =>
+            modelBuilder.Entity("Entities.Entity.DayEntity", b =>
                 {
-                    b.HasOne("Persistence.Entities.ScheduleEntity", "Schedule")
+                    b.HasOne("Entities.Entity.ScheduleEntity", "Schedule")
                         .WithMany("Days")
                         .HasForeignKey("ScheduleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -117,22 +117,22 @@ namespace Persistence.Migrations
                     b.Navigation("Schedule");
                 });
 
-            modelBuilder.Entity("Persistence.Entities.DayPersonEntity", b =>
+            modelBuilder.Entity("Entities.Entity.DayPersonEntity", b =>
                 {
-                    b.HasOne("Persistence.Entities.DayEntity", null)
+                    b.HasOne("Entities.Entity.DayEntity", null)
                         .WithMany()
                         .HasForeignKey("DayId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Persistence.Entities.PersonEntity", null)
+                    b.HasOne("Entities.Entity.PersonEntity", null)
                         .WithMany()
                         .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Persistence.Entities.ScheduleEntity", b =>
+            modelBuilder.Entity("Entities.Entity.ScheduleEntity", b =>
                 {
                     b.Navigation("Days");
                 });

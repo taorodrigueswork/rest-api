@@ -7,12 +7,7 @@
     <UserSecretsId>31bc984b-7680-4c92-a850-6648ff9c6b4c</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>
-    <CodeAnalysisRuleSet>.sonarlint\taorodrigueswork_rest-apicsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-
-  <ItemGroup>
-    <AdditionalFiles Include=".sonarlint\taorodrigueswork_rest-api\CSharp\SonarLint.xml" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />

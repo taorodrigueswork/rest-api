@@ -16,11 +16,12 @@ public class PersonBusiness : IBusiness<PersonDto, PersonEntity>
         _personRepository = personRepository;
     }
 
-    public async Task<PersonEntity> Add(PersonDto personDTO)
+    public async Task<PersonEntity> Add(PersonDto personDto)
     {
-        var person = await _personRepository.InsertAsync(_mapper.Map<PersonEntity>(personDTO));
+        var personEntity = _mapper.Map<PersonEntity>(personDto);
+        var person = await _personRepository.InsertAsync(personEntity);
 
-        _logger.LogInformation($"Added person ", person);
+        _logger.LogInformation($"Added person {person}");
 
         return person;
     }
@@ -35,7 +36,7 @@ public class PersonBusiness : IBusiness<PersonDto, PersonEntity>
         await _personRepository.DeleteAsync(person);
     }
 
-    public async Task<PersonEntity> GetById(int id)
+    public async Task<PersonEntity?> GetById(int id)
     {
         return await _personRepository.FindByIdAsync(id);
     }
