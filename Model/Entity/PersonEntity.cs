@@ -11,13 +11,13 @@ public class PersonEntity
 
     [Required]
     [Column(TypeName = "varchar(256)")]
-    public string Name { get; set; } = null!;
+    public string Name { get; set; } = string.Empty;
 
     [Column(TypeName = "varchar(128)")]
-    public string Phone { get; set; } = null!;
+    public string Phone { get; set; } = string.Empty;
 
     [Column(TypeName = "varchar(128)")]
-    public string Email { get; set; } = null!;
+    public string Email { get; set; } = string.Empty;
 
     public virtual List<DayEntity> Days { get; set; } = new();
 }

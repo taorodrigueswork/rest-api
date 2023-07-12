@@ -12,7 +12,7 @@ public class ScheduleEntity
 
     [Required]
     [Column(TypeName = "varchar(256)")]
-    public string Name { get; set; } = null!;
+    public string Name { get; set; } = string.Empty;
 
     [Required]
     public DateTime Created { get; set; } = DateTime.Now!;
