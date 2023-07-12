@@ -184,3 +184,6 @@ finally
 {
     Log.CloseAndFlush();
 }
+
+// Created to support this class to be used for integration tests purpose
+public partial class Program { }
