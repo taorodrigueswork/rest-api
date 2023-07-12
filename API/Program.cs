@@ -18,7 +18,10 @@ using Persistence.Interfaces.GenericRepository;
 using Persistence.Repository;
 using Persistence.Repository.GenericRepository;
 using Serilog;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
+
+[assembly: ExcludeFromCodeCoverage]
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
