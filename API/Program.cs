@@ -18,6 +18,7 @@ using Persistence.Interfaces.GenericRepository;
 using Persistence.Repository;
 using Persistence.Repository.GenericRepository;
 using Serilog;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 Log.Logger = new LoggerConfiguration()
@@ -183,4 +184,5 @@ finally
 }
 
 // Created to support this class to be used for integration tests purpose
+[ExcludeFromCodeCoverage]
 public partial class Program { }
