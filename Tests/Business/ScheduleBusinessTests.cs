@@ -2,6 +2,7 @@ namespace Tests.Business;
 
 using Entities.DTO.Request.Schedule;
 using global::Business;
+using Moq;
 using Persistence.Interfaces;
 
 
@@ -97,7 +98,7 @@ public class ScheduleBusinessTests
         var id = _fixture.Create<int>();
         var scheduleEntity = _fixture.Create<ScheduleEntity>();
 
-        _scheduleRepositoryMock.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(scheduleEntity);
+        _scheduleRepositoryMock.Setup(p => p.GetByIdWithSubclassesAsync(id)).ReturnsAsync(scheduleEntity);
 
         // Act
         var result = await _scheduleBusiness.GetById(id);
@@ -105,7 +106,7 @@ public class ScheduleBusinessTests
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(result, scheduleEntity);
-        _scheduleRepositoryMock.Verify(p => p.FindByIdAsync(It.IsAny<int>()), Times.Once);
+        _scheduleRepositoryMock.Verify(p => p.GetByIdWithSubclassesAsync(It.IsAny<int>()), Times.Once);
     }
 
     [TestMethod]
@@ -113,11 +114,13 @@ public class ScheduleBusinessTests
     {
         // Arrange
         var id = _fixture.Create<int>();
+        var dayEntityList = _fixture.CreateMany<DayEntity>(3).ToList();
         var scheduleDto = _fixture.Create<ScheduleDto>();
         var scheduleEntity = _fixture.Create<ScheduleEntity>();
         scheduleEntity.Id = id;
 
-        _scheduleRepositoryMock.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(scheduleEntity);
+        _scheduleRepositoryMock.Setup(p => p.GetByIdWithSubclassesAsync(id)).ReturnsAsync(scheduleEntity);
+        _dayRepositoryMock.Setup(p => p.GetDaysAsync(It.IsAny<List<int>>())).ReturnsAsync(dayEntityList);
 
         // Act
         var result = await _scheduleBusiness.Update(id, scheduleDto);
@@ -126,6 +129,7 @@ public class ScheduleBusinessTests
         Assert.IsNotNull(result);
         Assert.AreEqual(LogLevel.Information, _loggerMock.Invocations[0].Arguments[0]);
         _scheduleRepositoryMock.Verify(p => p.UpdateAsync(It.IsAny<ScheduleEntity>(), null), Times.Once);
+        _scheduleRepositoryMock.Verify(p => p.GetByIdWithSubclassesAsync(id), Times.Once);
         _dayRepositoryMock.Verify(p => p.GetDaysAsync(scheduleDto.Days), Times.Once);
     }
 

@@ -101,14 +101,14 @@ public class DayBusinessTest
         var dayEntity = _fixture.Create<DayEntity>();
         dayEntity.Id = dayId;
 
-        _dayRepositoryMock.Setup(repo => repo.FindByIdAsync(dayId)).ReturnsAsync(dayEntity);
+        _dayRepositoryMock.Setup(repo => repo.GetDayWithSubclassesAsync(dayId)).ReturnsAsync(dayEntity);
 
         // Act
         var result = await _dayBusiness.GetById(dayId);
 
         // Assert
         Assert.AreEqual(dayEntity, result);
-        _dayRepositoryMock.Verify(p => p.FindByIdAsync(It.IsAny<int>()), Times.Once);
+        _dayRepositoryMock.Verify(p => p.GetDayWithSubclassesAsync(It.IsAny<int>()), Times.Once);
     }
 
     [TestMethod]

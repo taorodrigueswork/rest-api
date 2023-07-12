@@ -30,7 +30,8 @@ public class AutoMapperProfile : Profile
         CreateMap<ScheduleEntity, ScheduleDto>().ReverseMap()
             .ForMember(source => source.Id, destination => destination.Ignore())
             .ForMember(source => source.Name, destination => destination.MapFrom(src => src.Name))
-            .ForMember(source => source.Created, destination => destination.Ignore());
+            .ForMember(source => source.Created, destination => destination.Ignore())
+            .ForMember(source => source.Days, destination => destination.Ignore());
 
         CreateMap<DayEntity, DayDto>().ReverseMap()
             .ForMember(source => source.Id, destination => destination.Ignore())
