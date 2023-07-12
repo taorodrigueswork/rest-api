@@ -45,11 +45,12 @@ public class PersonBusiness : IBusiness<PersonDto, PersonEntity>
     {
         var person = await _personRepository.FindByIdAsync(id);
 
-        ArgumentNullException.ThrowIfNull(person, $"The person with id {id} was not found.");
+        ArgumentNullException.ThrowIfNull(person, $"The person with id {id} was not found");
 
-        // Update person properties from DTO
-        person = _mapper.Map<PersonEntity>(personDTO);
-        person.Id = id;
+        // Not using AutoMapper here because it can cause issues with EF Core
+        person.Name = personDTO.Name;
+        person.Phone = personDTO.Phone;
+        person.Email = personDTO.Email;
 
         await _personRepository.UpdateAsync(person);
 

@@ -1,6 +1,7 @@
 using AutoFixture;
 using Entities.DTO.Request.Person;
 using Entities.Entity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -107,6 +108,107 @@ public class PersonControllerIntegrationTest : TestingWebAppFactory
 
         // Act
         var response = await _client.PostAsync(ApiV1Person, content);
+
+        // Assert
+        Assert.AreEqual(HttpStatusCode.UnprocessableEntity, response.StatusCode);
+        var responseString = await response.Content.ReadAsStringAsync();
+
+        Assert.IsNotNull(responseString);
+        Assert.IsTrue(responseString.Contains("The Name field is required."));
+        Assert.IsTrue(responseString.Contains("The Email field is required."));
+        Assert.IsTrue(responseString.Contains("The Phone field is required."));
+    }
+
+    [TestMethod]
+    public async Task DeletePersonAsync_ShouldReturn_Status204NoContent_WhenPersonExists()
+    {
+        //Arrange
+        // Arrange
+        _context.Database.EnsureCreated();
+
+        PersonEntity personEntity = _fixture.Create<PersonEntity>();
+        personEntity.Id = 1;
+
+        _context.Person?.Add(personEntity);
+        _context.SaveChanges();
+
+        //Act
+        var result = await _client.DeleteAsync($"{ApiV1Person}/{personEntity.Id}");
+
+        //Assert
+        Assert.IsNotNull(result);
+        Assert.AreEqual(HttpStatusCode.NoContent, result.StatusCode);
+    }
+
+    [TestMethod]
+    public async Task DeletePersonAsync_ShouldReturn_Status404NotFound_WhenPersonDoesNotExist()
+    {
+        //Act
+        var result = await _client.DeleteAsync($"{ApiV1Person}/1");
+
+        //Assert
+        Assert.IsNotNull(result);
+        Assert.AreEqual(HttpStatusCode.NotFound, result.StatusCode);
+    }
+
+    [TestMethod()]
+    public async Task UpdatePersonAsync_ReturnsOkObjectResult_WhenPersonIsUpdated()
+    {
+        // Arrange
+        _context.Database.EnsureCreated();
+
+        PersonEntity personEntity = _fixture.Create<PersonEntity>();
+        personEntity.Id = 1;
+
+        _context.Person?.Add(personEntity);
+        _context.SaveChanges();
+
+
+        PersonDto personDto = new() { Email = "NewEmail", Name = "NewName", Phone = "NewPhone" };
+        var jsonContent = JsonConvert.SerializeObject(personDto);
+
+        var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+        // Act
+        var response = await _client.PutAsync($"{ApiV1Person}/1", content);
+
+        // Assert
+        response.EnsureSuccessStatusCode();
+        var responseJson = await response.Content.ReadFromJsonAsync<PersonEntity>();
+
+        Assert.IsNotNull(responseJson);
+        Assert.AreEqual(personEntity.Id, responseJson?.Id);
+        Assert.AreEqual(personDto.Name, responseJson?.Name);
+        Assert.AreEqual(personDto.Email, responseJson?.Email);
+        Assert.AreEqual(personDto.Phone, responseJson?.Phone);
+    }
+
+    [TestMethod()]
+    public async Task UpdatePersonAsync_ReturnsNotFoundResult_WhenPersonDoesNotExist()
+    {
+        // Arrange
+        PersonDto personDto = new() { Email = "NewEmail", Name = "NewName", Phone = "NewPhone" };
+        var jsonContent = JsonConvert.SerializeObject(personDto);
+
+        var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+        // Act
+        var response = await _client.PutAsync($"{ApiV1Person}/1", content);
+
+        // Assert
+        Assert.IsNotNull(response);
+        Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [TestMethod()]
+    public async Task UpdatePersonAsync_ReturnsUnprocessableEntityObjectResult_WhenModelIsInvalid()
+    {
+        // Arrange
+        var jsonContent = JsonConvert.SerializeObject(new PersonDto() { Email = "", Name = "", Phone = "" });
+        var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+        // Act
+        var response = await _client.PutAsync($"{ApiV1Person}/1", content);
 
         // Assert
         Assert.AreEqual(HttpStatusCode.UnprocessableEntity, response.StatusCode);

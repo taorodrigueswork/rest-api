@@ -44,7 +44,7 @@ public class PersonController : ControllerBase
     [ServiceFilter(typeof(ValidationFilterAttribute))]
     public async Task<IActionResult> AddPersonAsync([FromBody] PersonDto personDto)
     {
-        return personDto == null ? BadRequest("Person cannot be null") : Created(string.Empty, await _personBusiness.Add(personDto));
+        return Created(string.Empty, await _personBusiness.Add(personDto));
     }
 
     /// <summary>
