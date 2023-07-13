@@ -12,12 +12,13 @@ namespace IntegrationTests;
 [TestFixture]
 public class PersonControllerIntegrationTest : TestingWebAppFactory
 {
-    private readonly HttpClient _client;
-    private readonly ApiContext _context;
-    private readonly Fixture? _fixture;
+    private HttpClient _client;
+    private ApiContext _context;
+    private Fixture? _fixture;
     private const string ApiV1Person = "/api/v1.0/Person";
 
-    public PersonControllerIntegrationTest()
+    [SetUp]
+    public void SetUp()
     {
         WebApplicationFactory<Program> factory = new TestingWebAppFactory();
         _client = factory.CreateClient(new WebApplicationFactoryClientOptions()
@@ -140,6 +141,7 @@ public class PersonControllerIntegrationTest : TestingWebAppFactory
     {
         // Arrange
         _context.Database.EnsureCreated();
+        personEntity.Days = new List<DayEntity>();
         _context.Person?.Add(personEntity);
         _context.SaveChanges();
 
