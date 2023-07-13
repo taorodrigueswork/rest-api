@@ -13,7 +13,7 @@
  
 # REST API TEMPLATE .NET CORE 7 
 
-This is a template for building RESTful APIs using .NET 7. It is a monolith using multilayer architecture, and uses some common libraries and configurations very used in .Net projects.
+This is a template for building REST APIs using .NET 7. It is a monolith using multilayer architecture, and uses some common libraries and configurations very used in .Net community.
 
 To get started, clone this repository and run the application using Visual Studio 2022 or the .NET CLI. 
 
@@ -33,7 +33,8 @@ This project uses the following technologies:
 - Repository Pattern
 - Azure Key Vault
 - Sonar Cloud
-- Coverlet
+- Coverlet- Validation Filter Attribute to validate DTOs
+- API Versioning and improved swagger documentation to support multiple versions
 
 ## Project Design
 
@@ -45,10 +46,10 @@ This project has classes representing one-to-many and many-to-many relationships
 
 - `API`: This folder contains the source code for the web API.
   - `Controllers`: This folder contains the controllers that handle incoming requests.
-  - `Program.cs`: This file is responsible for configuring and running the web host for the Rest API.
-  - `CustomMiddlewares`:  Implements the IMiddleware interface and is responsible for global error handling.  It intercepts exceptions thrown by the application and generates a JSON representation of an error response. 
+  - `Program.c	s`: This file is responsible for configuring and running the web host. After .NET6 we don't have to use Startup.cs anymore. And the code in the Program file is more concise and simple. TODO: Code Coverage is not ignoring this file when running GitHub Actions using dot net cli and SonarCloud.
+  - `CustomMiddlewares`:  Implements the IMiddleware interface and is responsible for global error handling.  It intercepts exceptions thrown by the application and throw the corret exception. 
   - `ValidationFilterAttribute.cs`:  Validates DTO required properties.
-- `Business`: This folder contains the business logic components.
+- `Business`: This project uses a generic Interface in all classes, in order to make it simple to make dependency injection. We only need to register one time in the Program.cs file and it is going to inject all business classes into the system commented. All classes receive an AutoMapper and a Log via dependency injection.
   - `IBusiness`: This folder contains the interfaces for the business logic components.
 - `Entities`: This folder contains the entity models.
   - `DTO`: This folder contains the data transfer objects (DTOs) used for request and response payloads.
@@ -56,24 +57,18 @@ This project has classes representing one-to-many and many-to-many relationships
   - `MapperProfile`: This file contains the AutoMapper mappings profile between DTOs and entity models.
 - `Persistence`: This folder contains the data access layer components, using Entity Framework Core ORM.
   - `Context`: It has an ApiContext that inherits from DbContext, which is a class provided by Entity Framework Core that represents a session with the database and allows you to query and save instances of your entity classes.
-  - `Migrations`: Contain all migration files defining the changes to the model that should be applied to the database.
+  - `Migrations`: Contain all migration files defining the changes to the model that should be applied to the database. NOTE: We are using SQL Server for production and Development and SQLite to run Integration Tests. In order to run the same migrations for different providers, we need to edit the migration and create a conditional to verify if the provider is SQL Server or SQLite. The difference between them is the AutoIncrement syntax for Primary Keys.
   - `Repository`: This folder contains the repository classes that handle database operations.
   - `IRepository`: This folder contains the interfaces for the repository classes.
 - `Tests`: 
   - `Entities.Test`: This folder contains the entity tests using MSTest.
 	- `MappingProfileTests`: It tests if all the properties are mapped correctly. Not a single property should be ignored. Helps to avoid mistakes when mapping entities and DTOs.
   - `Business.Test`: This folder contains the business tests using MSTest.
+  - `ExceptionHandlingMiddlewareTests`: 
+  - `ValidationFilterAttributeTests`: 
+  - `Persistence`: 
 	
 ## Components
-
-### Web API Project
-
-All the configuration is done in the Program.cs file. After .NET6 we don't have to use Startup.cs anymore. And the code in the Program file is more concise and simple.
-
-### Business
-
-This project uses a generic Interface in all classes, in order to make it simple to make dependency injection. We only need to register one time in the Program.cs file and it is going to inject all business classes into the system commented.
-All classes receive an AutoMapper and a Log via dependency injection.
 
 ### Logging
 
