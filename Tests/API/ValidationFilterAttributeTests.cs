@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Tests.API;
 
-[TestClass]
+[TestFixture]
 public class ValidationFilterAttributeTests
 {
-    [TestMethod]
+    [Test]
     public void OnActionExecuting_WithInvalidModelState_SetsUnprocessableEntityResult()
     {
         // Arrange
@@ -30,10 +30,10 @@ public class ValidationFilterAttributeTests
         attribute.OnActionExecuting(context);
 
         // Assert
-        Assert.IsInstanceOfType(context.Result, typeof(UnprocessableEntityObjectResult));
+        Assert.IsInstanceOf(typeof(UnprocessableEntityObjectResult), context.Result);
     }
 
-    [TestMethod]
+    [Test]
     public void OnActionExecuting_WithValidModelState_DoesNotSetResult()
     {
         // Arrange
@@ -55,7 +55,7 @@ public class ValidationFilterAttributeTests
         Assert.IsNull(context.Result);
     }
 
-    [TestMethod]
+    [Test]
     public void OnActionExecuted_DoesNotSetResult()
     {
         // Arrange

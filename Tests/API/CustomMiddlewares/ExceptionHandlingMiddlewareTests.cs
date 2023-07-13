@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace Tests.API.CustomMiddlewares
 {
-    [TestClass]
+    [TestFixture]
     public class ExceptionHandlingMiddlewareTests
     {
         private ExceptionHandlingMiddleware _middleware;
@@ -13,7 +13,7 @@ namespace Tests.API.CustomMiddlewares
         private Mock<RequestDelegate> _nextDelegateMock;
         private Mock<ILogger<ExceptionHandlingMiddleware>> _loggerMock;
 
-        [TestInitialize]
+        [SetUp]
         public void Setup()
         {
             _nextDelegateMock = new Mock<RequestDelegate>();
@@ -23,7 +23,7 @@ namespace Tests.API.CustomMiddlewares
             _httpContext.Response.Body = new MemoryStream();
         }
 
-        [TestMethod]
+        [Test]
         public async Task InvokeAsync_ShouldCallNextDelegate()
         {
             // Arrange
@@ -35,7 +35,7 @@ namespace Tests.API.CustomMiddlewares
             _nextDelegateMock.Verify(next => next.Invoke(_httpContext), Times.Once);
         }
 
-        [TestMethod]
+        [Test]
         public async Task InvokeAsync_ShouldHandleApplicationException_WithInvalidToken()
         {
             // Arrange
@@ -49,7 +49,7 @@ namespace Tests.API.CustomMiddlewares
             AssertErrorResponse(HttpStatusCode.Forbidden, exception.Message);
         }
 
-        [TestMethod]
+        [Test]
         public async Task InvokeAsync_ShouldHandleApplicationException_WithoutInvalidToken()
         {
             // Arrange
@@ -63,7 +63,7 @@ namespace Tests.API.CustomMiddlewares
             AssertErrorResponse(HttpStatusCode.BadRequest, exception.Message);
         }
 
-        [TestMethod]
+        [Test]
         public async Task InvokeAsync_ShouldHandleArgumentNullException_WithNotFound()
         {
             // Arrange
@@ -77,7 +77,7 @@ namespace Tests.API.CustomMiddlewares
             AssertErrorResponse(HttpStatusCode.NotFound, exception.Message);
         }
 
-        [TestMethod]
+        [Test]
         public async Task InvokeAsync_ShouldHandleArgumentNullException_WithoutNotFound()
         {
             // Arrange
@@ -91,7 +91,7 @@ namespace Tests.API.CustomMiddlewares
             AssertErrorResponse(HttpStatusCode.BadRequest, exception.Message);
         }
 
-        [TestMethod]
+        [Test]
         public async Task InvokeAsync_ShouldHandleOtherExceptions()
         {
             // Arrange

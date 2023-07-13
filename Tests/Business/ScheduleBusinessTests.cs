@@ -1,12 +1,13 @@
+using Entities.DTO.Request.Schedule;
+
 namespace Tests.Business;
 
-using Entities.DTO.Request.Schedule;
 using global::Business;
 using Moq;
 using Persistence.Interfaces;
 
 
-[TestClass()]
+[TestFixture]
 public class ScheduleBusinessTests
 {
     private Fixture? _fixture;
@@ -16,7 +17,7 @@ public class ScheduleBusinessTests
     private Mock<IDayRepository>? _dayRepositoryMock;
     private Mock<ILogger<ScheduleBusiness>> _loggerMock;
 
-    [TestInitialize]
+    [SetUp]
     public void TestInit()
     {
         // AutoMapperMock setup
@@ -39,7 +40,7 @@ public class ScheduleBusinessTests
         _scheduleBusiness = new ScheduleBusiness(_mapperMock, _loggerMock.Object, _scheduleRepositoryMock.Object, _dayRepositoryMock.Object);
     }
 
-    [TestMethod]
+    [Test]
     public async Task Add_ScheduleDto_ReturnsScheduleEntityAsync()
     {
         // Arrange
@@ -58,7 +59,7 @@ public class ScheduleBusinessTests
         Assert.AreEqual(LogLevel.Information, _loggerMock.Invocations[0].Arguments[0]);
     }
 
-    [TestMethod]
+    [Test]
     public async Task Delete_Schedule_by_id_Async()
     {
         // Arrange
@@ -77,7 +78,7 @@ public class ScheduleBusinessTests
         _scheduleRepositoryMock.Verify(p => p.FindByIdAsync(It.IsAny<int>()), Times.Once);
     }
 
-    [TestMethod]
+    [Test]
     [ExpectedException(typeof(ArgumentNullException))]
     public async Task Delete_NotFound_Throws_Exception_Async()
     {
@@ -91,7 +92,7 @@ public class ScheduleBusinessTests
         await _scheduleBusiness.Delete(id);
     }
 
-    [TestMethod]
+    [Test]
     public async Task GetById_Returns_Schedule_Entity_Async()
     {
         // Arrange
@@ -109,7 +110,7 @@ public class ScheduleBusinessTests
         _scheduleRepositoryMock.Verify(p => p.GetByIdWithSubclassesAsync(It.IsAny<int>()), Times.Once);
     }
 
-    [TestMethod]
+    [Test]
     public async Task Update_ScheduleDto_Returns_Schedule_Entity_Async()
     {
         // Arrange
@@ -133,7 +134,7 @@ public class ScheduleBusinessTests
         _dayRepositoryMock.Verify(p => p.GetDaysAsync(scheduleDto.Days), Times.Once);
     }
 
-    [TestMethod]
+    [Test]
     [ExpectedException(typeof(ArgumentNullException))]
     public async Task Update_NotFound_ReturnsNullAsync()
     {

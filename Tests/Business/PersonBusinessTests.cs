@@ -1,30 +1,25 @@
+using Entities.DTO.Request.Person;
+
 namespace Tests.Business;
 
-using Entities.DTO.Request.Person;
 using global::Business;
 using Persistence.Interfaces;
 
 
-[TestClass()]
+[TestFixture]
 public class PersonBusinessTests
 {
-    private Fixture? _fixture;
     private IMapper _mapperMock;
     private PersonBusiness? _personBusiness;
     private Mock<IPersonRepository>? _personRepositoryMock;
-    private Mock<ILogger<PersonBusiness>> _loggerMock;
+    private Mock<ILogger<PersonBusiness>>? _loggerMock;
 
-    [TestInitialize]
+    [SetUp]
     public void TestInit()
     {
         // AutoMapperMock setup
         var mapperConfig = new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperProfile>());
         _mapperMock = mapperConfig.CreateMapper();
-
-        _fixture = new Fixture();// https://docs.educationsmediagroup.com/unit-testing-csharp/autofixture/quick-glance-at-autofixture
-        _fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
-                         .ForEach(b => _fixture.Behaviors.Remove(b));
-        _fixture.Behaviors.Add(new OmitOnRecursionBehavior());// using this property to avoid circular references
 
         // Repository Moq setup
         _personRepositoryMock = new Mock<IPersonRepository>();
@@ -36,66 +31,55 @@ public class PersonBusinessTests
         _personBusiness = new PersonBusiness(_mapperMock, _loggerMock.Object, _personRepositoryMock.Object);
     }
 
-    [TestMethod]
-    public async Task Add_PersonDto_ReturnsPersonEntityAsync()
+    [Test, CustomAutoData]
+    public async Task Add_PersonDto_ReturnsPersonEntityAsync(PersonDto personDto, PersonEntity personEntity)
     {
-        // Arrange
-        PersonDto personDTO = _fixture.Create<PersonDto>();
-        PersonEntity personEntity = _fixture.Create<PersonEntity>();
-
-        _personRepositoryMock.Setup(r => r.InsertAsync(It.IsAny<PersonEntity>())).ReturnsAsync(personEntity);
+        // Assert
+        _personRepositoryMock?.Setup(r => r.InsertAsync(It.IsAny<PersonEntity>())).ReturnsAsync(personEntity);
 
         // Act
-        var result = await _personBusiness.Add(personDTO);
+        var result = await _personBusiness.Add(personDto);
 
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(result, personEntity);
-        Assert.AreEqual(1, _loggerMock.Invocations.Count);
-        Assert.AreEqual(LogLevel.Information, _loggerMock.Invocations[0].Arguments[0]);
+        Assert.AreEqual(1, _loggerMock?.Invocations.Count);
+        Assert.AreEqual(LogLevel.Information, _loggerMock?.Invocations[0].Arguments[0]);
     }
 
-    [TestMethod]
-    public async Task Delete_Person_by_id_ReturnsPersonEntityAsync()
+    [Test, CustomAutoData]
+    public async Task Delete_Person_by_id_ReturnsPersonEntityAsync(int id, PersonEntity personEntity)
     {
-        // Arrange
-        var id = _fixture.Create<int>();
-        PersonEntity personEntity = _fixture.Create<PersonEntity>();
-
-        _personRepositoryMock.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(personEntity);
+        // Assert
+        _personRepositoryMock?.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(personEntity);
 
         // Act
         await _personBusiness.Delete(id);
 
         // Assert
-        Assert.AreEqual(1, _loggerMock.Invocations.Count);
-        Assert.AreEqual(LogLevel.Information, _loggerMock.Invocations[0].Arguments[0]);
-        _personRepositoryMock.Verify(p => p.DeleteAsync(It.IsAny<PersonEntity>(), null), Times.Once);
-        _personRepositoryMock.Verify(p => p.FindByIdAsync(It.IsAny<int>()), Times.Once);
+        Assert.AreEqual(1, _loggerMock?.Invocations.Count);
+        Assert.AreEqual(LogLevel.Information, _loggerMock?.Invocations[0].Arguments[0]);
+        _personRepositoryMock?.Verify(p => p.DeleteAsync(It.IsAny<PersonEntity>(), null), Times.Once);
+        _personRepositoryMock?.Verify(p => p.FindByIdAsync(It.IsAny<int>()), Times.Once);
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentNullException))]
-    public async Task Delete_NotFound_Throws_Exception_Async()
+    [Test, CustomAutoData]
+    public void Delete_NotFound_Throws_Exception_Async(int id)
     {
         // Arrange
-        var id = _fixture.Create<int>();
         PersonEntity? personEntity = null;
 
-        _personRepositoryMock.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(personEntity);
+        _personRepositoryMock?.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(personEntity);
 
-        // Act
-        await _personBusiness.Delete(id);
+        // Assert
+        Assert.ThrowsAsync<ArgumentNullException>(() => _personBusiness.Delete(id));
     }
 
-    [TestMethod]
-    public async Task GetById_Int_ReturnsPersonEntityAsync()
+    [Test, CustomAutoData]
+    public async Task GetById_Int_ReturnsPersonEntityAsync(int id, PersonEntity personEntity)
     {
         // Arrange
-        var id = _fixture.Create<int>();
-        var personEntity = _fixture.Create<PersonEntity>();
-
-        _personRepositoryMock.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(personEntity);
+        _personRepositoryMock?.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(personEntity);
 
         // Act
         var result = await _personBusiness.GetById(id);
@@ -103,41 +87,35 @@ public class PersonBusinessTests
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(result, personEntity);
-        _personRepositoryMock.Verify(p => p.FindByIdAsync(It.IsAny<int>()), Times.Once);
+        _personRepositoryMock?.Verify(p => p.FindByIdAsync(It.IsAny<int>()), Times.Once);
     }
 
-    [TestMethod]
-    public async Task Update_PersonDto_ReturnsPersonEntityAsync()
+    [Test, CustomAutoData]
+    public async Task Update_PersonDto_ReturnsPersonEntityAsync(int id, PersonDto personDto, PersonEntity personEntity)
     {
         // Arrange
-        var id = _fixture.Create<int>();
-        var personDto = _fixture.Create<PersonDto>();
-        var personEntity = _fixture.Create<PersonEntity>();
         personEntity.Id = id;
 
-        _personRepositoryMock.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(personEntity);
+        _personRepositoryMock?.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(personEntity);
 
         // Act
         var result = await _personBusiness.Update(id, personDto);
 
         // Assert
         Assert.IsNotNull(result);
-        Assert.AreEqual(LogLevel.Information, _loggerMock.Invocations[0].Arguments[0]);
-        _personRepositoryMock.Verify(p => p.UpdateAsync(It.IsAny<PersonEntity>(), null), Times.Once);
+        Assert.AreEqual(LogLevel.Information, _loggerMock?.Invocations[0].Arguments[0]);
+        _personRepositoryMock?.Verify(p => p.UpdateAsync(It.IsAny<PersonEntity>(), null), Times.Once);
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentNullException))]
-    public async Task Update_NotFound_ReturnsNullAsync()
+    [Test, CustomAutoData]
+    public void Update_NotFound_ReturnsNullAsync(int id, PersonDto personDto)
     {
         // Arrange
-        var id = _fixture.Create<int>();
-        var personDto = _fixture.Build<PersonDto>().Create();
         PersonEntity? personEntity = null;
 
         _personRepositoryMock.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(personEntity);
 
         // Act
-        await _personBusiness.Update(id, personDto);
+        Assert.ThrowsAsync<ArgumentNullException>(() => _personBusiness.Update(id, personDto));
     }
 }

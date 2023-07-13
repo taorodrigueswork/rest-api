@@ -1,6 +1,6 @@
-namespace Entities.Test;
+namespace Tests.Entities;
 
-[TestClass]
+[TestFixture]
 
 public class MappingProfileTests
 {
@@ -9,7 +9,7 @@ public class MappingProfileTests
     // Not a single property should be ignored.
     // For more information, see https://www.twilio.com/blog/test-driven-automapper-net-core
     // </summary>
-    [TestMethod]
+    [Test]
     public void ValidateMappingConfigurationTest()
     {
         MapperConfiguration mapperConfig = new MapperConfiguration(
