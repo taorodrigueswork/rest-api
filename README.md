@@ -11,30 +11,31 @@
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=taorodrigueswork_rest-api&metric=sqale_index)](https://sonarcloud.io/dashboard?id=taorodrigueswork_rest-api)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=taorodrigueswork_rest-api&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=taorodrigueswork_rest-api)
  
-# REST API TEMPLATE .NET CORE 7 
+# REST API TEMPLATE .NET CORE 7 / ENTITY FRAMEWORK CORE 7
 
-This is a template for building REST APIs using .NET 7. It is a monolith using multilayer architecture, and uses some common libraries and configurations very used in .Net community.
+This is a template for building REST APIs using .NET 7 and Entity Framework Core 7. It is a monolith using multilayer architecture and uses some common libraries and configurations very used in the .Net community.
 
-To get started, clone this repository and run the application using Visual Studio 2022 or the .NET CLI. 
+To get started, you can just clone this repository and run the application using Visual Studio 2022 or the .NET CLI. 
 
 ## Technologies
 
 This project uses the following technologies:
-- .NET 7
+- [.NET 7](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-7)
 - C#
-- SQL Server
-- Entity Framework Core 7
-- Serilog
-- Seq or Elastic Search
-- Automapper
-- MSTest, [AutoFixture](https://docs.educationsmediagroup.com/unit-testing-csharp/autofixture/quick-glance-at-autofixture) to create objects with data, and [ByteStudio.AutoFixture](https://libraries.io/nuget/ByteStudio.AutoFixture.MSTest1) to use AutoData in MSTest.
-- Swagger
-- Global Error Middleware
-- Repository Pattern
-- Azure Key Vault
-- Sonar Cloud
-- Coverlet- Validation Filter Attribute to validate DTOs
-- API Versioning and improved swagger documentation to support multiple versions
+- [SQL Server](https://www.microsoft.com/en-us/sql-server) for developing and production, and [SQLite in Memory](https://www.sqlite.org/index.html) for Integration Testing.
+- [Entity Framework Core 7](https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-7.0/whatsnew)
+- [Serilog](https://serilog.net/)
+- [Seq](https://datalust.co/seq) or Elastic Search
+- [Automapper](https://automapper.org/)
+- [nUnit](https://nunit.org/), [AutoFixture](https://docs.educationsmediagroup.com/unit-testing-csharp/autofixture/quick-glance-at-autofixture)
+- [Swagger](https://swagger.io/)
+- [Global Error Middleware](https://code-maze.com/global-error-handling-aspnetcore/)
+- [Repository Pattern](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/infrastructure-persistence-layer-design)
+- [Azure Key Vault](https://azure.microsoft.com/en-us/products/key-vault/)
+- [Sonar Cloud](https://docs.sonarcloud.io/)
+- [Coverlet](https://github.com/coverlet-coverage/coverlet)
+- Validation Filter Attribute to validate DTOs
+- [API Versioning](https://github.com/dotnet/aspnet-api-versioning/wiki) and improved swagger documentation to support multiple versions
 
 ## Project Design
 
