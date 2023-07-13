@@ -20,22 +20,22 @@ To get started, you can just clone this repository and run the application using
 ## Technologies
 
 This project uses the following technologies:
-- .NET 7
+- [.NET 7](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-7)
 - C#
-- SQL Server
-- Entity Framework Core 7
+- [SQL Server](https://www.microsoft.com/en-us/sql-server) for developing and production, and [SQLite in Memory](https://www.sqlite.org/index.html) for Integration Testing.
+- [Entity Framework Core 7](https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-7.0/whatsnew)
 - [Serilog](https://serilog.net/)
 - [Seq](https://datalust.co/seq) or Elastic Search
 - [Automapper](https://automapper.org/)
 - [nUnit](https://nunit.org/), [AutoFixture](https://docs.educationsmediagroup.com/unit-testing-csharp/autofixture/quick-glance-at-autofixture)
-- Swagger
-- Global Error Middleware
-- Repository Pattern
-- Azure Key Vault
-- Sonar Cloud
-- Coverlet
+- [Swagger](https://swagger.io/)
+- [Global Error Middleware](https://code-maze.com/global-error-handling-aspnetcore/)
+- [Repository Pattern](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/infrastructure-persistence-layer-design)
+- [Azure Key Vault](https://azure.microsoft.com/en-us/products/key-vault/)
+- [Sonar Cloud](https://docs.sonarcloud.io/)
+- [Coverlet](https://github.com/coverlet-coverage/coverlet)
 - Validation Filter Attribute to validate DTOs
-- API Versioning and improved swagger documentation to support multiple versions
+- [API Versioning](https://github.com/dotnet/aspnet-api-versioning/wiki) and improved swagger documentation to support multiple versions
 
 ## Project Design
 
