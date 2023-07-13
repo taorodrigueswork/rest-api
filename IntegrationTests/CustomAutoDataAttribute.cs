@@ -1,7 +1,4 @@
-﻿using AutoFixture;
-using AutoFixture.NUnit3;
-
-namespace IntegrationTests;
+﻿namespace IntegrationTests;
 
 public class CustomAutoDataAttribute : AutoDataAttribute
 {

@@ -61,7 +61,7 @@ public class DayBusiness : IBusiness<DayDto, DayEntity>
         var people = await _personRepository.GetPeopleAsync(entity.People);
 
         day.Day = entity.Day;
-        day.Schedule = await _scheduleRepository.FindByIdAsync(entity.ScheduleId);
+        day.Schedule = await _scheduleRepository.FindByIdAsync(entity.ScheduleId) ?? throw new InvalidOperationException($"Schedule with id {entity.ScheduleId} was not found");
 
         // Assign the fetched people to the day
         day.People.Clear();// Clear the old list of people in the memory

@@ -49,9 +49,9 @@ public class ConfigureSwaggerOptions
     /// <summary>
     /// Create information about the version of the API
     /// </summary>
-    /// <param name="description"></param>
+    /// <param name="desc"></param>
     /// <returns>Information about the API</returns>
-    private OpenApiInfo CreateVersionInfo(
+    private static OpenApiInfo CreateVersionInfo(
             ApiVersionDescription desc)
     {
         var info = new OpenApiInfo()
