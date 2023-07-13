@@ -128,7 +128,7 @@ public class PersonControllerIntegrationTest : TestingWebAppFactory
     public async Task DeletePersonAsync_ShouldReturn_Status404NotFound_WhenPersonDoesNotExist()
     {
         //Act
-        var result = await _client.DeleteAsync($"{ApiV1Person}/1");
+        var result = await _client.DeleteAsync($"{ApiV1Person}/-1");
 
         //Assert
         Assert.IsNotNull(result);

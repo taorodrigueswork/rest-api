@@ -208,7 +208,7 @@ public class DayControllerIntegrationTest : TestingWebAppFactory
         var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
         // Act
-        var response = await _client.PutAsync($"{ApiV1Day}/1", content);
+        var response = await _client.PutAsync($"{ApiV1Day}/-1", content);
 
         // Assert
         Assert.IsNotNull(response);
