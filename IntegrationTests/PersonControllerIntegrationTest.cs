@@ -1,7 +1,4 @@
-using AutoFixture;
 using Entities.DTO.Request.Person;
-using Entities.Entity;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -12,7 +9,7 @@ using System.Text;
 
 namespace IntegrationTests;
 
-[TestClass]
+[TestFixture]
 public class PersonControllerIntegrationTest : TestingWebAppFactory
 {
     private readonly HttpClient _client;
@@ -31,33 +28,26 @@ public class PersonControllerIntegrationTest : TestingWebAppFactory
         var scope = factory.Services.CreateScope();
         _context = scope.ServiceProvider.GetRequiredService<ApiContext>()!;
 
-        _fixture = new Fixture();
-        _fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
-            .ForEach(b => _fixture.Behaviors.Remove(b));
-        _fixture.Behaviors.Add(new OmitOnRecursionBehavior());// using this property to avoid circular references
+        _fixture = CustomAutoDataAttribute.CreateOmitOnRecursionFixture();
     }
 
     //	Marks a method that should be called after each test method. One such method should be present before each test class.
-    [TestCleanup]
+    [TearDown]
     public void TearDown()
     {
         _context.Database.EnsureDeleted();
     }
 
-    [TestMethod]
-    public async Task GetPersonFromId_Success()
+    [Test, CustomAutoData]
+    public async Task GetPersonFromId_Success(PersonEntity personEntity)
     {
         // Arrange
         _context.Database.EnsureCreated();
-
-        PersonEntity personEntity = _fixture.Create<PersonEntity>();
-        personEntity.Id = 1;
-
         _context.Person?.Add(personEntity);
         _context.SaveChanges();
 
         // Act
-        var response = await _client.GetAsync($"{ApiV1Person}/1");
+        var response = await _client.GetAsync($"{ApiV1Person}/{personEntity.Id}");
 
         // Assert
         response.EnsureSuccessStatusCode();
@@ -78,11 +68,10 @@ public class PersonControllerIntegrationTest : TestingWebAppFactory
         Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
     }
 
-    [TestMethod]
-    public async Task AddPerson_ValidInput_Async()
+    [Test, CustomAutoData]
+    public async Task AddPerson_ValidInput_Async(PersonDto personDto)
     {
         // Arrange
-        PersonDto personDto = _fixture.Create<PersonDto>();
         var jsonContent = JsonConvert.SerializeObject(personDto);
         var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
@@ -99,7 +88,7 @@ public class PersonControllerIntegrationTest : TestingWebAppFactory
         Assert.AreEqual(personDto.Phone, responseJson?.Phone);
     }
 
-    [TestMethod]
+    [Test]
     public async Task AddPerson_InvalidInput_Async()
     {
         // Arrange
@@ -119,16 +108,11 @@ public class PersonControllerIntegrationTest : TestingWebAppFactory
         Assert.IsTrue(responseString.Contains("The Phone field is required."));
     }
 
-    [TestMethod]
-    public async Task DeletePersonAsync_ShouldReturn_Status204NoContent_WhenPersonExists()
+    [Test, CustomAutoData]
+    public async Task DeletePersonAsync_ShouldReturn_Status204NoContent_WhenPersonExists(PersonEntity personEntity)
     {
         //Arrange
-        // Arrange
         _context.Database.EnsureCreated();
-
-        PersonEntity personEntity = _fixture.Create<PersonEntity>();
-        personEntity.Id = 1;
-
         _context.Person?.Add(personEntity);
         _context.SaveChanges();
 
@@ -140,7 +124,7 @@ public class PersonControllerIntegrationTest : TestingWebAppFactory
         Assert.AreEqual(HttpStatusCode.NoContent, result.StatusCode);
     }
 
-    [TestMethod]
+    [Test]
     public async Task DeletePersonAsync_ShouldReturn_Status404NotFound_WhenPersonDoesNotExist()
     {
         //Act
@@ -151,18 +135,13 @@ public class PersonControllerIntegrationTest : TestingWebAppFactory
         Assert.AreEqual(HttpStatusCode.NotFound, result.StatusCode);
     }
 
-    [TestMethod()]
-    public async Task UpdatePersonAsync_ReturnsOkObjectResult_WhenPersonIsUpdated()
+    [Test, CustomAutoData]
+    public async Task UpdatePersonAsync_ReturnsOkObjectResult_WhenPersonIsUpdated(PersonEntity personEntity)
     {
         // Arrange
         _context.Database.EnsureCreated();
-
-        PersonEntity personEntity = _fixture.Create<PersonEntity>();
-        personEntity.Id = 1;
-
         _context.Person?.Add(personEntity);
         _context.SaveChanges();
-
 
         PersonDto personDto = new() { Email = "NewEmail", Name = "NewName", Phone = "NewPhone" };
         var jsonContent = JsonConvert.SerializeObject(personDto);
@@ -170,7 +149,7 @@ public class PersonControllerIntegrationTest : TestingWebAppFactory
         var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
         // Act
-        var response = await _client.PutAsync($"{ApiV1Person}/1", content);
+        var response = await _client.PutAsync($"{ApiV1Person}/{personEntity.Id}", content);
 
         // Assert
         response.EnsureSuccessStatusCode();
@@ -183,7 +162,7 @@ public class PersonControllerIntegrationTest : TestingWebAppFactory
         Assert.AreEqual(personDto.Phone, responseJson?.Phone);
     }
 
-    [TestMethod()]
+    [Test]
     public async Task UpdatePersonAsync_ReturnsNotFoundResult_WhenPersonDoesNotExist()
     {
         // Arrange
@@ -200,7 +179,7 @@ public class PersonControllerIntegrationTest : TestingWebAppFactory
         Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
     }
 
-    [TestMethod()]
+    [Test]
     public async Task UpdatePersonAsync_ReturnsUnprocessableEntityObjectResult_WhenModelIsInvalid()
     {
         // Arrange

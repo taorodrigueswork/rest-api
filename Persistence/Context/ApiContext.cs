@@ -24,8 +24,8 @@ public class ApiContext : DbContext
             .HasMany(n => n.People)
             .WithMany(n => n.Days)
             .UsingEntity<DayPersonEntity>(
-                l => l.HasOne<PersonEntity>().WithMany().HasForeignKey(e => e.PersonId),
-                r => r.HasOne<DayEntity>().WithMany().HasForeignKey(e => e.DayId));
+                l => l.HasOne<PersonEntity>().WithMany().HasForeignKey(e => e.PersonId).OnDelete(DeleteBehavior.Cascade),
+                r => r.HasOne<DayEntity>().WithMany().HasForeignKey(e => e.DayId).OnDelete(DeleteBehavior.Cascade));
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -152,8 +152,8 @@ namespace Persistence.Migrations
                     name: "DayPerson",
                     columns: table => new
                     {
-                        DayId = table.Column<int>(type: "int", nullable: false),
-                        PersonId = table.Column<int>(type: "int", nullable: false)
+                        DayId = table.Column<int>(type: "INTEGER", nullable: false),
+                        PersonId = table.Column<int>(type: "INTEGER", nullable: false)
                     },
                     constraints: table =>
                     {

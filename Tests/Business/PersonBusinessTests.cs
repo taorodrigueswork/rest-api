@@ -9,7 +9,6 @@ using Persistence.Interfaces;
 [TestFixture]
 public class PersonBusinessTests
 {
-    private Fixture? _fixture;
     private IMapper _mapperMock;
     private PersonBusiness? _personBusiness;
     private Mock<IPersonRepository>? _personRepositoryMock;
@@ -21,8 +20,6 @@ public class PersonBusinessTests
         // AutoMapperMock setup
         var mapperConfig = new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperProfile>());
         _mapperMock = mapperConfig.CreateMapper();
-
-        _fixture = CustomAutoDataAttribute.CreateOmitOnRecursionFixture();
 
         // Repository Moq setup
         _personRepositoryMock = new Mock<IPersonRepository>();

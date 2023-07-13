@@ -36,15 +36,15 @@ public class DayController : ControllerBase
     /// <summary>
     /// Adds a new day.
     /// </summary>
-    /// <param name="dayDTO">The day object to add.</param>
+    /// <param name="dayDto">The day object to add.</param>
     /// <returns>An IActionResult representing the status of the operation with the details of the new entity created.</returns>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(DayEntity))]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     [ServiceFilter(typeof(ValidationFilterAttribute))]
-    public async Task<IActionResult> AddDayAsync([FromBody] DayDto dayDTO)
+    public async Task<IActionResult> AddDayAsync([FromBody] DayDto dayDto)
     {
-        return dayDTO == null ? BadRequest("Day cannot be null") : Created(string.Empty, await _dayBusiness.Add(dayDTO));
+        return Created(string.Empty, await _dayBusiness.Add(dayDto));
     }
 
     /// <summary>
