@@ -24,10 +24,7 @@ public class ScheduleBusinessTests
         var mapperConfig = new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperProfile>());
         _mapperMock = mapperConfig.CreateMapper();
 
-        _fixture = new Fixture();// https://docs.educationsmediagroup.com/unit-testing-csharp/autofixture/quick-glance-at-autofixture
-        _fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
-                         .ForEach(b => _fixture.Behaviors.Remove(b));
-        _fixture.Behaviors.Add(new OmitOnRecursionBehavior());// using this property to avoid circular references
+        _fixture = CustomAutoDataAttribute.CreateOmitOnRecursionFixture();
 
         // Repository Moq setup
         _scheduleRepositoryMock = new Mock<IScheduleRepository>();
@@ -40,17 +37,14 @@ public class ScheduleBusinessTests
         _scheduleBusiness = new ScheduleBusiness(_mapperMock, _loggerMock.Object, _scheduleRepositoryMock.Object, _dayRepositoryMock.Object);
     }
 
-    [Test]
-    public async Task Add_ScheduleDto_ReturnsScheduleEntityAsync()
+    [Test, CustomAutoData]
+    public async Task Add_ScheduleDto_ReturnsScheduleEntityAsync(ScheduleDto scheduleDto, ScheduleEntity scheduleEntity)
     {
         // Arrange
-        ScheduleDto scheduleDTO = _fixture.Create<ScheduleDto>();
-        ScheduleEntity scheduleEntity = _fixture.Create<ScheduleEntity>();
-
-        _scheduleRepositoryMock.Setup(r => r.InsertAsync(It.IsAny<ScheduleEntity>())).ReturnsAsync(scheduleEntity);
+        _scheduleRepositoryMock?.Setup(r => r.InsertAsync(It.IsAny<ScheduleEntity>())).ReturnsAsync(scheduleEntity);
 
         // Act
-        var result = await _scheduleBusiness.Add(scheduleDTO);
+        var result = await _scheduleBusiness.Add(scheduleDto);
 
         // Assert
         Assert.IsNotNull(result);
@@ -59,14 +53,11 @@ public class ScheduleBusinessTests
         Assert.AreEqual(LogLevel.Information, _loggerMock.Invocations[0].Arguments[0]);
     }
 
-    [Test]
-    public async Task Delete_Schedule_by_id_Async()
+    [Test, CustomAutoData]
+    public async Task Delete_Schedule_by_id_Async(int id, ScheduleEntity scheduleEntity)
     {
         // Arrange
-        var id = _fixture.Create<int>();
-        ScheduleEntity scheduleEntity = _fixture.Create<ScheduleEntity>();
-
-        _scheduleRepositoryMock.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(scheduleEntity);
+        _scheduleRepositoryMock?.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(scheduleEntity);
 
         // Act
         await _scheduleBusiness.Delete(id);
@@ -74,32 +65,27 @@ public class ScheduleBusinessTests
         // Assert
         Assert.AreEqual(1, _loggerMock.Invocations.Count);
         Assert.AreEqual(LogLevel.Information, _loggerMock.Invocations[0].Arguments[0]);
-        _scheduleRepositoryMock.Verify(p => p.DeleteAsync(It.IsAny<ScheduleEntity>(), null), Times.Once);
-        _scheduleRepositoryMock.Verify(p => p.FindByIdAsync(It.IsAny<int>()), Times.Once);
+        _scheduleRepositoryMock?.Verify(p => p.DeleteAsync(It.IsAny<ScheduleEntity>(), null), Times.Once);
+        _scheduleRepositoryMock?.Verify(p => p.FindByIdAsync(It.IsAny<int>()), Times.Once);
     }
 
-    [Test]
-    [ExpectedException(typeof(ArgumentNullException))]
-    public async Task Delete_NotFound_Throws_Exception_Async()
+    [Test, CustomAutoData]
+    public void Delete_NotFound_Throws_Exception_Async(int id)
     {
         // Arrange
-        var id = _fixture.Create<int>();
         ScheduleEntity? scheduleEntity = null;
 
-        _scheduleRepositoryMock.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(scheduleEntity);
+        _scheduleRepositoryMock?.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(scheduleEntity);
 
         // Act
-        await _scheduleBusiness.Delete(id);
+        Assert.ThrowsAsync<ArgumentNullException>(() => _scheduleBusiness.Delete(id));
     }
 
-    [Test]
-    public async Task GetById_Returns_Schedule_Entity_Async()
+    [Test, CustomAutoData]
+    public async Task GetById_Returns_Schedule_Entity_Async(int id, ScheduleEntity scheduleEntity)
     {
         // Arrange
-        var id = _fixture.Create<int>();
-        var scheduleEntity = _fixture.Create<ScheduleEntity>();
-
-        _scheduleRepositoryMock.Setup(p => p.GetByIdWithSubclassesAsync(id)).ReturnsAsync(scheduleEntity);
+        _scheduleRepositoryMock?.Setup(p => p.GetByIdWithSubclassesAsync(id)).ReturnsAsync(scheduleEntity);
 
         // Act
         var result = await _scheduleBusiness.GetById(id);
@@ -107,21 +93,18 @@ public class ScheduleBusinessTests
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(result, scheduleEntity);
-        _scheduleRepositoryMock.Verify(p => p.GetByIdWithSubclassesAsync(It.IsAny<int>()), Times.Once);
+        _scheduleRepositoryMock?.Verify(p => p.GetByIdWithSubclassesAsync(It.IsAny<int>()), Times.Once);
     }
 
-    [Test]
-    public async Task Update_ScheduleDto_Returns_Schedule_Entity_Async()
+    [Test, CustomAutoData]
+    public async Task Update_ScheduleDto_Returns_Schedule_Entity_Async(int id, ScheduleDto scheduleDto, ScheduleEntity scheduleEntity)
     {
         // Arrange
-        var id = _fixture.Create<int>();
         var dayEntityList = _fixture.CreateMany<DayEntity>(3).ToList();
-        var scheduleDto = _fixture.Create<ScheduleDto>();
-        var scheduleEntity = _fixture.Create<ScheduleEntity>();
         scheduleEntity.Id = id;
 
-        _scheduleRepositoryMock.Setup(p => p.GetByIdWithSubclassesAsync(id)).ReturnsAsync(scheduleEntity);
-        _dayRepositoryMock.Setup(p => p.GetDaysAsync(It.IsAny<List<int>>())).ReturnsAsync(dayEntityList);
+        _scheduleRepositoryMock?.Setup(p => p.GetByIdWithSubclassesAsync(id)).ReturnsAsync(scheduleEntity);
+        _dayRepositoryMock?.Setup(p => p.GetDaysAsync(It.IsAny<List<int>>())).ReturnsAsync(dayEntityList);
 
         // Act
         var result = await _scheduleBusiness.Update(id, scheduleDto);
@@ -129,23 +112,20 @@ public class ScheduleBusinessTests
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(LogLevel.Information, _loggerMock.Invocations[0].Arguments[0]);
-        _scheduleRepositoryMock.Verify(p => p.UpdateAsync(It.IsAny<ScheduleEntity>(), null), Times.Once);
-        _scheduleRepositoryMock.Verify(p => p.GetByIdWithSubclassesAsync(id), Times.Once);
-        _dayRepositoryMock.Verify(p => p.GetDaysAsync(scheduleDto.Days), Times.Once);
+        _scheduleRepositoryMock?.Verify(p => p.UpdateAsync(It.IsAny<ScheduleEntity>(), null), Times.Once);
+        _scheduleRepositoryMock?.Verify(p => p.GetByIdWithSubclassesAsync(id), Times.Once);
+        _dayRepositoryMock?.Verify(p => p.GetDaysAsync(scheduleDto.Days), Times.Once);
     }
 
-    [Test]
-    [ExpectedException(typeof(ArgumentNullException))]
-    public async Task Update_NotFound_ReturnsNullAsync()
+    [Test, CustomAutoData]
+    public void Update_NotFound_ReturnsNullAsync(int id, ScheduleDto scheduleDto)
     {
         // Arrange
-        var id = _fixture.Create<int>();
-        var ScheduleDto = _fixture.Build<ScheduleDto>().Create();
         ScheduleEntity? scheduleEntity = null;
 
-        _scheduleRepositoryMock.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(scheduleEntity);
+        _scheduleRepositoryMock?.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(scheduleEntity);
 
         // Act
-        await _scheduleBusiness.Update(id, ScheduleDto);
+        Assert.ThrowsAsync<ArgumentNullException>(() => _scheduleBusiness.Update(id, scheduleDto));
     }
 }
