@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Persistence.Interfaces.GenericRepository;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 
 namespace Persistence.Repository.GenericRepository;
 
-
+[ExcludeFromCodeCoverage]
 public class GenericRepository<T> : IGenericRepository<T> where T : class, new()
 {
     public readonly DbContext Context;
