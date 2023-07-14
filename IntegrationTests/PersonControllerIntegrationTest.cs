@@ -10,6 +10,7 @@ using System.Text;
 namespace IntegrationTests;
 
 [TestFixture]
+[SingleThreadedAttribute]
 public class PersonControllerIntegrationTest : TestingWebAppFactory
 {
     private HttpClient? _client;
