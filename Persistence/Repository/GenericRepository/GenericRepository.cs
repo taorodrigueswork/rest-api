@@ -80,18 +80,6 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class, new()
         await SaveDatabaseAsync();
     }
 
-    public async Task UpdateRangeAsync(T entity, Func<T, bool> predicate = default!)
-    {
-        if (predicate != default)
-        {
-            DetachLocal(predicate);
-        }
-
-        Context.Set<T>().UpdateRange(entity);
-
-        await SaveDatabaseAsync();
-    }
-
     private async Task SaveDatabaseAsync()
     {
         await Context.SaveChangesAsync();

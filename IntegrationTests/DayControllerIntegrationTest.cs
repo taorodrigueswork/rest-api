@@ -12,8 +12,8 @@ namespace IntegrationTests;
 [TestFixture]
 public class DayControllerIntegrationTest : TestingWebAppFactory
 {
-    private HttpClient _client;
-    private ApiContext _context;
+    private HttpClient? _client;
+    private ApiContext? _context;
     private Fixture? _fixture;
     private const string ApiV1Day = "/api/v1.0/Day";
 
@@ -36,22 +36,22 @@ public class DayControllerIntegrationTest : TestingWebAppFactory
     [TearDown]
     public void TearDown()
     {
-        _context.Database.EnsureDeleted();
+        _context?.Database.EnsureDeleted();
     }
 
     [Test, CustomAutoData]
     public async Task GetDayFromId_Success(DayEntity dayEntity)
     {
         // Arrange
-        _context.Database.EnsureCreated();
+        _context?.Database.EnsureCreated();
 
         dayEntity.Id = 1;
 
-        _context.Day?.Add(dayEntity);
-        _context.SaveChanges();
+        _context?.Day?.Add(dayEntity);
+        _context?.SaveChanges();
 
         // Act
-        var response = await _client.GetAsync($"{ApiV1Day}/1");
+        var response = await _client?.GetAsync($"{ApiV1Day}/1")!;
 
         // Assert
         response.EnsureSuccessStatusCode();
@@ -66,7 +66,7 @@ public class DayControllerIntegrationTest : TestingWebAppFactory
     public async Task GetDayFromId_NotFound()
     {
         // Act
-        var response = await _client.GetAsync($"{ApiV1Day}/0");
+        var response = await _client?.GetAsync($"{ApiV1Day}/0")!;
 
         // Assert
         Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
@@ -76,23 +76,23 @@ public class DayControllerIntegrationTest : TestingWebAppFactory
     public async Task AddDay_ValidInput_Async()
     {
         // Arrange
-        _context.Database.EnsureCreated();
+        _context?.Database.EnsureCreated();
 
         var personEntity = CreatePersonAndScheduleEntity(out var scheduleEntity, 1);
 
-        _context.SaveChanges();
+        _context?.SaveChanges();
 
         DayDto dayDto = _fixture?.Build<DayDto>()
                                 ?.With(p => p.People, new List<int>() { personEntity.Id })
                                 ?.With(p => p.ScheduleId, scheduleEntity.Id)
-                                ?.Create();
+                                ?.Create()!;
 
         // Arrange
         var jsonContent = JsonConvert.SerializeObject(dayDto);
         var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
         // Act
-        var response = await _client.PostAsync(ApiV1Day, content);
+        var response = await _client?.PostAsync(ApiV1Day, content)!;
 
         // Assert
         Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
@@ -113,7 +113,7 @@ public class DayControllerIntegrationTest : TestingWebAppFactory
         var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
         // Act
-        var response = await _client.PostAsync(ApiV1Day, content);
+        var response = await _client?.PostAsync(ApiV1Day, content)!;
 
         // Assert
         Assert.AreEqual(HttpStatusCode.UnprocessableEntity, response.StatusCode);
@@ -128,22 +128,22 @@ public class DayControllerIntegrationTest : TestingWebAppFactory
     public async Task DeleteDayAsync_ShouldReturn_Status204NoContent_WhenDayExists()
     {
         //Arrange
-        _context.Database.EnsureCreated();
+        _context?.Database.EnsureCreated();
 
         var personEntity = CreatePersonAndScheduleEntity(out var scheduleEntity, 1);
 
-        DayEntity dayEntity = new DayEntity()
+        DayEntity dayEntity = new()
         {
-            People = new List<PersonEntity>() { personEntity },
+            People = new List<PersonEntity> { personEntity },
             Schedule = scheduleEntity,
             Day = DateTime.Now
         };
 
-        _context.Day?.Add(dayEntity);
-        _context.SaveChanges();
+        _context?.Day?.Add(dayEntity);
+        _context?.SaveChanges();
 
         //Act
-        var result = await _client.DeleteAsync($"{ApiV1Day}/{dayEntity.Id}");
+        var result = await _client?.DeleteAsync($"{ApiV1Day}/{dayEntity.Id}")!;
 
         //Assert
         Assert.IsNotNull(result);
@@ -154,7 +154,7 @@ public class DayControllerIntegrationTest : TestingWebAppFactory
     public async Task DeleteDayAsync_ShouldReturn_Status404NotFound_WhenDayDoesNotExist()
     {
         //Act
-        var result = await _client.DeleteAsync($"{ApiV1Day}/1");
+        var result = await _client?.DeleteAsync($"{ApiV1Day}/1")!;
 
         //Assert
         Assert.IsNotNull(result);
@@ -166,20 +166,20 @@ public class DayControllerIntegrationTest : TestingWebAppFactory
     public async Task UpdateDayAsync_ReturnsOkObjectResult_WhenDayIsUpdated()
     {
         // Arrange
-        _context.Database.EnsureCreated();
+        _context?.Database.EnsureCreated();
 
         var personEntity = CreatePersonAndScheduleEntity(out var scheduleEntity, 1);
         var personEntity2 = CreatePersonAndScheduleEntity(out var scheduleEntity2, 2);
 
-        DayEntity dayEntity = new DayEntity()
+        DayEntity dayEntity = new()
         {
-            People = new List<PersonEntity>() { personEntity },
+            People = new List<PersonEntity> { personEntity },
             Schedule = scheduleEntity,
             Day = DateTime.Now
         };
 
-        _context.Day?.Add(dayEntity);
-        _context.SaveChanges();
+        _context?.Day?.Add(dayEntity);
+        _context?.SaveChanges();
 
         DayDto dayDto = new()
         {
@@ -193,7 +193,7 @@ public class DayControllerIntegrationTest : TestingWebAppFactory
         var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
         // Act
-        var response = await _client.PutAsync($"{ApiV1Day}/{dayEntity.Id}", content);
+        var response = await _client?.PutAsync($"{ApiV1Day}/{dayEntity.Id}", content)!;
 
         // Assert
         response.EnsureSuccessStatusCode();
@@ -214,7 +214,7 @@ public class DayControllerIntegrationTest : TestingWebAppFactory
         var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
         // Act
-        var response = await _client.PutAsync($"{ApiV1Day}/-1", content);
+        var response = await _client?.PutAsync($"{ApiV1Day}/-1", content)!;
 
         // Assert
         Assert.IsNotNull(response);
@@ -230,7 +230,7 @@ public class DayControllerIntegrationTest : TestingWebAppFactory
         var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
         // Act
-        var response = await _client.PutAsync($"{ApiV1Day}/1", content);
+        var response = await _client?.PutAsync($"{ApiV1Day}/1", content)!;
 
         // Assert
         Assert.AreEqual(HttpStatusCode.UnprocessableEntity, response.StatusCode);
@@ -249,8 +249,8 @@ public class DayControllerIntegrationTest : TestingWebAppFactory
         personEntity.Id = id;
         scheduleEntity.Id = id;
 
-        _context.Person?.Add(personEntity);
-        _context.Schedule?.Add(scheduleEntity);
+        _context?.Person?.Add(personEntity);
+        _context?.Schedule?.Add(scheduleEntity);
         return personEntity;
     }
 }

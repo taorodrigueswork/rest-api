@@ -21,7 +21,7 @@ public class PersonBusiness : IBusiness<PersonDto, PersonEntity>
         var personEntity = _mapper.Map<PersonEntity>(personDto);
         var person = await _personRepository.InsertAsync(personEntity);
 
-        _logger.LogInformation($"Added person {person}");
+        _logger.LogInformation("Added person {person}", person);
 
         return person;
     }
@@ -54,7 +54,7 @@ public class PersonBusiness : IBusiness<PersonDto, PersonEntity>
 
         await _personRepository.UpdateAsync(person);
 
-        _logger.LogInformation($"Updated person with name {person.Name} and ID {person.Id}", person);
+        _logger.LogInformation("Updated person with name {person.Name} and ID {person.Id}", person.Name, person.Id);
 
         return person;
     }

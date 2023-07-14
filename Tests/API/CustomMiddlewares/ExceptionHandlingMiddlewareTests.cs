@@ -8,10 +8,10 @@ namespace Tests.API.CustomMiddlewares
     [TestFixture]
     public class ExceptionHandlingMiddlewareTests
     {
-        private ExceptionHandlingMiddleware _middleware;
-        private HttpContext _httpContext;
-        private Mock<RequestDelegate> _nextDelegateMock;
-        private Mock<ILogger<ExceptionHandlingMiddleware>> _loggerMock;
+        private ExceptionHandlingMiddleware? _middleware;
+        private HttpContext? _httpContext;
+        private Mock<RequestDelegate>? _nextDelegateMock;
+        private Mock<ILogger<ExceptionHandlingMiddleware>>? _loggerMock;
 
         [SetUp]
         public void Setup()
@@ -29,10 +29,10 @@ namespace Tests.API.CustomMiddlewares
             // Arrange
 
             // Act
-            await _middleware.InvokeAsync(_httpContext);
+            await _middleware?.InvokeAsync(_httpContext!)!;
 
             // Assert
-            _nextDelegateMock.Verify(next => next.Invoke(_httpContext), Times.Once);
+            _nextDelegateMock?.Verify(next => next.Invoke(_httpContext!), Times.Once);
         }
 
         [Test]
@@ -40,10 +40,10 @@ namespace Tests.API.CustomMiddlewares
         {
             // Arrange
             var exception = new ApplicationException("Invalid Token");
-            _nextDelegateMock.Setup(next => next.Invoke(_httpContext)).Throws(exception);
+            _nextDelegateMock?.Setup(next => next.Invoke(_httpContext!)).Throws(exception);
 
             // Act
-            await _middleware.InvokeAsync(_httpContext);
+            await _middleware?.InvokeAsync(_httpContext!)!;
 
             // Assert
             AssertErrorResponse(HttpStatusCode.Forbidden, exception.Message);
@@ -54,10 +54,10 @@ namespace Tests.API.CustomMiddlewares
         {
             // Arrange
             var exception = new ApplicationException("Some error");
-            _nextDelegateMock.Setup(next => next.Invoke(_httpContext)).Throws(exception);
+            _nextDelegateMock?.Setup(next => next.Invoke(_httpContext!)).Throws(exception);
 
             // Act
-            await _middleware.InvokeAsync(_httpContext);
+            await _middleware?.InvokeAsync(_httpContext!)!;
 
             // Assert
             AssertErrorResponse(HttpStatusCode.BadRequest, exception.Message);
@@ -67,11 +67,12 @@ namespace Tests.API.CustomMiddlewares
         public async Task InvokeAsync_ShouldHandleArgumentNullException_WithNotFound()
         {
             // Arrange
-            var exception = new ArgumentNullException("Some argument not found");
-            _nextDelegateMock.Setup(next => next.Invoke(_httpContext)).Throws(exception);
+            var exception = new ArgumentNullException("Some argument not found")!;
+            _nextDelegateMock?.Setup(next => next.Invoke(_httpContext!))
+                .Throws(exception);
 
             // Act
-            await _middleware.InvokeAsync(_httpContext);
+            await _middleware?.InvokeAsync(_httpContext!)!;
 
             // Assert
             AssertErrorResponse(HttpStatusCode.NotFound, exception.Message);
@@ -82,10 +83,10 @@ namespace Tests.API.CustomMiddlewares
         {
             // Arrange
             var exception = new ArgumentNullException("Some argument");
-            _nextDelegateMock.Setup(next => next.Invoke(_httpContext)).Throws(exception);
+            _nextDelegateMock?.Setup(next => next.Invoke(_httpContext!)).Throws(exception);
 
             // Act
-            await _middleware.InvokeAsync(_httpContext);
+            await _middleware?.InvokeAsync(_httpContext!)!;
 
             // Assert
             AssertErrorResponse(HttpStatusCode.BadRequest, exception.Message);
@@ -96,10 +97,10 @@ namespace Tests.API.CustomMiddlewares
         {
             // Arrange
             var exception = new Exception("Some error");
-            _nextDelegateMock.Setup(next => next.Invoke(_httpContext)).Throws(exception);
+            _nextDelegateMock?.Setup(next => next.Invoke(_httpContext!)).Throws(exception);
 
             // Act
-            await _middleware.InvokeAsync(_httpContext);
+            await _middleware?.InvokeAsync(_httpContext!)!;
 
             // Assert
             AssertErrorResponse(HttpStatusCode.InternalServerError, exception.Message);
@@ -107,7 +108,7 @@ namespace Tests.API.CustomMiddlewares
 
         private void AssertErrorResponse(HttpStatusCode expectedStatusCode, string expectedErrorMessage)
         {
-            _httpContext.Response.Body.Seek(0, SeekOrigin.Begin);
+            _httpContext!.Response.Body.Seek(0, SeekOrigin.Begin);
             using var reader = new StreamReader(_httpContext.Response.Body);
             var responseContent = reader.ReadToEnd();
             var jsonResponse = JsonSerializer.Deserialize<string>(responseContent);

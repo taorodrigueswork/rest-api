@@ -57,7 +57,7 @@ public class ScheduleBusiness : IBusiness<ScheduleDto, ScheduleEntity>
 
         await _scheduleRepository.UpdateAsync(schedule);
 
-        _logger.LogInformation($"Updated schedule with ID {id}", schedule);
+        _logger.LogInformation("Updated schedule with ID {id}", id);
 
         return schedule;
     }

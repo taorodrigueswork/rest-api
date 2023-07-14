@@ -69,7 +69,7 @@ public class DayBusiness : IBusiness<DayDto, DayEntity>
 
         await _dayRepository.UpdateAsync(day);
 
-        _logger.LogInformation($"Updated day with ID {day.Id}", day);
+        _logger.LogInformation("Updated day with ID {day.Id} : {day}", day.Id, day);
 
         return day;
     }

@@ -9,7 +9,7 @@ using Persistence.Interfaces;
 [TestFixture]
 public class PersonBusinessTests
 {
-    private IMapper _mapperMock;
+    private IMapper? _mapperMock;
     private PersonBusiness? _personBusiness;
     private Mock<IPersonRepository>? _personRepositoryMock;
     private Mock<ILogger<PersonBusiness>>? _loggerMock;
@@ -38,7 +38,7 @@ public class PersonBusinessTests
         _personRepositoryMock?.Setup(r => r.InsertAsync(It.IsAny<PersonEntity>())).ReturnsAsync(personEntity);
 
         // Act
-        var result = await _personBusiness.Add(personDto);
+        var result = await _personBusiness?.Add(personDto)!;
 
         // Assert
         Assert.IsNotNull(result);
@@ -54,12 +54,12 @@ public class PersonBusinessTests
         _personRepositoryMock?.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(personEntity);
 
         // Act
-        await _personBusiness.Delete(id);
+        await _personBusiness?.Delete(id)!;
 
         // Assert
         Assert.AreEqual(1, _loggerMock?.Invocations.Count);
         Assert.AreEqual(LogLevel.Information, _loggerMock?.Invocations[0].Arguments[0]);
-        _personRepositoryMock?.Verify(p => p.DeleteAsync(It.IsAny<PersonEntity>(), null), Times.Once);
+        _personRepositoryMock?.Verify(p => p.DeleteAsync(It.IsAny<PersonEntity>(), null!), Times.Once);
         _personRepositoryMock?.Verify(p => p.FindByIdAsync(It.IsAny<int>()), Times.Once);
     }
 
@@ -72,7 +72,7 @@ public class PersonBusinessTests
         _personRepositoryMock?.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(personEntity);
 
         // Assert
-        Assert.ThrowsAsync<ArgumentNullException>(() => _personBusiness.Delete(id));
+        Assert.ThrowsAsync<ArgumentNullException>(() => _personBusiness?.Delete(id)!);
     }
 
     [Test, CustomAutoData]
@@ -82,7 +82,7 @@ public class PersonBusinessTests
         _personRepositoryMock?.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(personEntity);
 
         // Act
-        var result = await _personBusiness.GetById(id);
+        var result = await _personBusiness?.GetById(id)!;
 
         // Assert
         Assert.IsNotNull(result);
@@ -99,12 +99,12 @@ public class PersonBusinessTests
         _personRepositoryMock?.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(personEntity);
 
         // Act
-        var result = await _personBusiness.Update(id, personDto);
+        var result = await _personBusiness?.Update(id, personDto)!;
 
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(LogLevel.Information, _loggerMock?.Invocations[0].Arguments[0]);
-        _personRepositoryMock?.Verify(p => p.UpdateAsync(It.IsAny<PersonEntity>(), null), Times.Once);
+        _personRepositoryMock?.Verify(p => p.UpdateAsync(It.IsAny<PersonEntity>(), null!), Times.Once);
     }
 
     [Test, CustomAutoData]
@@ -113,9 +113,9 @@ public class PersonBusinessTests
         // Arrange
         PersonEntity? personEntity = null;
 
-        _personRepositoryMock.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(personEntity);
+        _personRepositoryMock?.Setup(p => p.FindByIdAsync(id)).ReturnsAsync(personEntity);
 
         // Act
-        Assert.ThrowsAsync<ArgumentNullException>(() => _personBusiness.Update(id, personDto));
+        Assert.ThrowsAsync<ArgumentNullException>(() => _personBusiness?.Update(id, personDto)!);
     }
 }

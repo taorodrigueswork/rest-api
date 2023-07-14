@@ -15,10 +15,10 @@ public class DayRepository : GenericRepository<DayEntity>, IDayRepository
 
     }
 
-    public async Task<List<DayEntity>> GetDaysAsync(List<int> ids)
+    public async Task<List<DayEntity>> GetDaysAsync(List<int> days)
     {
         return (await Context.Set<DayEntity>()
-                             .Where(p => ids.Any(id => id == p.Id))
+                             .Where(p => days.Any(id => id == p.Id))
                              .ToListAsync());
     }
 

@@ -9,13 +9,13 @@ public class BaseEntity
 {
     public string Validate()
     {
-        ValidationContext context = new ValidationContext(this, serviceProvider: null, items: null);
-        List<ValidationResult> results = new List<ValidationResult>();
+        ValidationContext context = new(this, serviceProvider: null, items: null);
+        List<ValidationResult> results = new();
         var isValid = Validator.TryValidateObject(this, context, results, true);
 
         if (!isValid)
         {
-            StringBuilder sbrErrors = new StringBuilder();
+            StringBuilder sbrErrors = new();
             foreach (var validationResult in results)
             {
                 sbrErrors.AppendLine(validationResult.ErrorMessage);

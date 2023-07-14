@@ -12,9 +12,8 @@ namespace IntegrationTests;
 [TestFixture]
 public class PersonControllerIntegrationTest : TestingWebAppFactory
 {
-    private HttpClient _client;
-    private ApiContext _context;
-    private Fixture? _fixture;
+    private HttpClient? _client;
+    private ApiContext? _context;
     private const string ApiV1Person = "/api/v1.0/Person";
 
     [SetUp]
@@ -28,27 +27,25 @@ public class PersonControllerIntegrationTest : TestingWebAppFactory
 
         var scope = factory.Services.CreateScope();
         _context = scope.ServiceProvider.GetRequiredService<ApiContext>()!;
-
-        _fixture = CustomAutoDataAttribute.CreateOmitOnRecursionFixture();
     }
 
     //	Marks a method that should be called after each test method. One such method should be present before each test class.
     [TearDown]
     public void TearDown()
     {
-        _context.Database.EnsureDeleted();
+        _context?.Database.EnsureDeleted();
     }
 
     [Test, CustomAutoData]
     public async Task GetPersonFromId_Success(PersonEntity personEntity)
     {
         // Arrange
-        _context.Database.EnsureCreated();
-        _context.Person?.Add(personEntity);
-        _context.SaveChanges();
+        _context?.Database.EnsureCreated();
+        _context?.Person?.Add(personEntity);
+        _context?.SaveChanges();
 
         // Act
-        var response = await _client.GetAsync($"{ApiV1Person}/{personEntity.Id}");
+        var response = await _client?.GetAsync($"{ApiV1Person}/{personEntity.Id}")!;
 
         // Assert
         response.EnsureSuccessStatusCode();
@@ -63,7 +60,7 @@ public class PersonControllerIntegrationTest : TestingWebAppFactory
     public async Task GetPersonFromId_NotFound()
     {
         // Act
-        var response = await _client.GetAsync($"{ApiV1Person}/0");
+        var response = await _client?.GetAsync($"{ApiV1Person}/0")!;
 
         // Assert
         Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
@@ -77,7 +74,7 @@ public class PersonControllerIntegrationTest : TestingWebAppFactory
         var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
         // Act
-        var response = await _client.PostAsync(ApiV1Person, content);
+        var response = await _client?.PostAsync(ApiV1Person, content)!;
 
         // Assert
         Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
@@ -97,7 +94,7 @@ public class PersonControllerIntegrationTest : TestingWebAppFactory
         var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
         // Act
-        var response = await _client.PostAsync(ApiV1Person, content);
+        var response = await _client?.PostAsync(ApiV1Person, content)!;
 
         // Assert
         Assert.AreEqual(HttpStatusCode.UnprocessableEntity, response.StatusCode);
@@ -113,12 +110,12 @@ public class PersonControllerIntegrationTest : TestingWebAppFactory
     public async Task DeletePersonAsync_ShouldReturn_Status204NoContent_WhenPersonExists(PersonEntity personEntity)
     {
         //Arrange
-        _context.Database.EnsureCreated();
-        _context.Person?.Add(personEntity);
-        _context.SaveChanges();
+        _context?.Database.EnsureCreated();
+        _context?.Person?.Add(personEntity);
+        _context?.SaveChanges();
 
         //Act
-        var result = await _client.DeleteAsync($"{ApiV1Person}/{personEntity.Id}");
+        var result = await _client?.DeleteAsync($"{ApiV1Person}/{personEntity.Id}")!;
 
         //Assert
         Assert.IsNotNull(result);
@@ -129,7 +126,7 @@ public class PersonControllerIntegrationTest : TestingWebAppFactory
     public async Task DeletePersonAsync_ShouldReturn_Status404NotFound_WhenPersonDoesNotExist()
     {
         //Act
-        var result = await _client.DeleteAsync($"{ApiV1Person}/-1");
+        var result = await _client?.DeleteAsync($"{ApiV1Person}/-1")!;
 
         //Assert
         Assert.IsNotNull(result);
@@ -140,10 +137,10 @@ public class PersonControllerIntegrationTest : TestingWebAppFactory
     public async Task UpdatePersonAsync_ReturnsOkObjectResult_WhenPersonIsUpdated(PersonEntity personEntity)
     {
         // Arrange
-        _context.Database.EnsureCreated();
+        _context?.Database.EnsureCreated();
         personEntity.Days = new List<DayEntity>();
-        _context.Person?.Add(personEntity);
-        _context.SaveChanges();
+        _context?.Person?.Add(personEntity);
+        _context?.SaveChanges();
 
         PersonDto personDto = new() { Email = "NewEmail", Name = "NewName", Phone = "NewPhone" };
         var jsonContent = JsonConvert.SerializeObject(personDto);
@@ -151,7 +148,7 @@ public class PersonControllerIntegrationTest : TestingWebAppFactory
         var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
         // Act
-        var response = await _client.PutAsync($"{ApiV1Person}/{personEntity.Id}", content);
+        var response = await _client?.PutAsync($"{ApiV1Person}/{personEntity.Id}", content)!;
 
         // Assert
         response.EnsureSuccessStatusCode();
@@ -174,7 +171,7 @@ public class PersonControllerIntegrationTest : TestingWebAppFactory
         var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
         // Act
-        var response = await _client.PutAsync($"{ApiV1Person}/-1", content);
+        var response = await _client?.PutAsync($"{ApiV1Person}/-1", content)!;
 
         // Assert
         Assert.IsNotNull(response);
@@ -189,7 +186,7 @@ public class PersonControllerIntegrationTest : TestingWebAppFactory
         var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
         // Act
-        var response = await _client.PutAsync($"{ApiV1Person}/1", content);
+        var response = await _client?.PutAsync($"{ApiV1Person}/1", content)!;
 
         // Assert
         Assert.AreEqual(HttpStatusCode.UnprocessableEntity, response.StatusCode);

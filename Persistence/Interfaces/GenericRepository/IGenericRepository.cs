@@ -47,12 +47,4 @@ public interface IGenericRepository<T> where T : class
     /// <param name="predicate">Filter to update in specific case</param>
     /// <returns></returns>
     Task UpdateAsync(T entity, Func<T, bool> predicate = default!);
-
-    /// <summary>
-    /// Updates range of data from the database matching the specified predicate.
-    /// </summary>
-    /// <param name="entity">Object to update</param>
-    /// <param name="predicate">Filter to update in specific cases</param>
-    /// <returns></returns>
-    Task UpdateRangeAsync(T entity, Func<T, bool> predicate = default!);
 }

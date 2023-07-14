@@ -1,7 +1,10 @@
 ﻿using API;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Routing;
 
 namespace Tests.API;
 
@@ -16,7 +19,7 @@ public class ValidationFilterAttributeTests
 
         var httpContext = new DefaultHttpContext();
 
-        var actionContext = new ActionContext(httpContext, new(), new(), new());
+        var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor(), new ModelStateDictionary());
 
         var context = new ActionExecutingContext(
             actionContext,
@@ -41,7 +44,7 @@ public class ValidationFilterAttributeTests
 
         var httpContext = new DefaultHttpContext();
 
-        var actionContext = new ActionContext(httpContext, new(), new(), new());
+        var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor(), new ModelStateDictionary());
 
         var context = new ActionExecutingContext(
             actionContext,
@@ -63,12 +66,12 @@ public class ValidationFilterAttributeTests
 
         var httpContext = new DefaultHttpContext();
 
-        var actionContext = new ActionContext(httpContext, new(), new(), new());
+        var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor(), new ModelStateDictionary());
 
         var context = new ActionExecutedContext(
                  actionContext,
                  new List<IFilterMetadata>(),
-                 null);
+                 null!);
 
         //Act
         attribute.OnActionExecuted(context);
