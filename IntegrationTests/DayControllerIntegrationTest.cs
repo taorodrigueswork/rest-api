@@ -162,7 +162,6 @@ public class DayControllerIntegrationTest : TestingWebAppFactory
     }
 
     [Test]
-    [NUnit.Framework.Ignore("Not running")]
     public async Task UpdateDayAsync_ReturnsOkObjectResult_WhenDayIsUpdated()
     {
         // Arrange
@@ -170,6 +169,10 @@ public class DayControllerIntegrationTest : TestingWebAppFactory
 
         var personEntity = CreatePersonAndScheduleEntity(out var scheduleEntity, 1);
         var personEntity2 = CreatePersonAndScheduleEntity(out var scheduleEntity2, 2);
+        personEntity.Days.Clear();
+        personEntity2.Days.Clear();
+        scheduleEntity.Days.Clear();
+        scheduleEntity2.Days.Clear();
 
         DayEntity dayEntity = new()
         {
