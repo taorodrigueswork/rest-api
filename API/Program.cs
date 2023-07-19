@@ -88,6 +88,8 @@ try
         builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
         var serilogUrl = builder.Configuration.GetSection("Seq")["Url"];
+        var connectionString = builder.Configuration.GetConnectionString("SqlServerLocal"); // Access the database using the local connection string is running locally
+
         // Connect to the database using Azure Key Vault and Azure Managed Identity to retrieve the connection string
         if (builder.Environment.IsProduction())
         {
@@ -98,24 +100,16 @@ try
 
             var keyVaultClient = new SecretClient(new Uri(keyVaultURL), new DefaultAzureCredential());
 
-            builder.Services.AddDbContext<ApiContext>(options =>
-            {
-                options.UseSqlServer(keyVaultClient.GetSecret("ConnectionStrings--SqlServer").Value.ToString())
-                       .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-            });
+            connectionString = Task.Run(async () => await keyVaultClient.GetSecretAsync("ConnectionStringSqlServer")).Result.Value.Value;
 
-            serilogUrl = keyVaultClient.GetSecret("Seq--Url").Value.ToString();
+            serilogUrl = Task.Run(async () => await keyVaultClient.GetSecretAsync("Seq--Url")).Result.Value.Value;
         }
 
-        // Access the database using the local connection string is running locally
-        if (builder.Environment.IsDevelopment())
+        builder.Services.AddDbContext<ApiContext>(options =>
         {
-            builder.Services.AddDbContext<ApiContext>(options =>
-            {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"))
-                       .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-            });
-        }
+            options.UseSqlServer(connectionString)
+                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+        });
 
         // Add Serilog to the application
         // https://www.youtube.com/watch?v=0acSdHJfk64
