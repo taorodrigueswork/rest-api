@@ -1,4 +1,4 @@
-name: Build and push staging images
+name: Build and push the latest build to staging
 
 on:
   push:
@@ -10,24 +10,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
+      
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v1
+        
       - name: Docker Login
-        # You may pin to the exact commit or the version.
-        # uses: docker/login-action@f3364599c6aa293cdc2b8391b1b56d0c30e45c8a
         uses: docker/login-action@v1
         with:
-          # Server address of Docker registry. If not set then will default to Docker Hub
-          registry: # optional
-          # Username used to log against the Docker registry
-          username: # optional
-          # Password or personal access token used to log against the Docker registry
-          password: # optional
-          # Log out from the Docker registry at the end of a job
-          logout: # optional, default is true
+          registry: ${{ secrets.ACR_NAME }}
+          username: ${{ secrets.ACR_LOGIN }}
+          password: ${{ secrets.ACR_PASSWORD }}
 
-      - name: Build and push Docker images
-        # You may pin to the exact commit or the version.
-        # uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5
-        uses: docker/build-push-action@v3.2.0
+      - name: Build and push staging images
+        uses: docker/build-push-action@v2
         with:
-          # Here we'll have a list of parameters
+          context: .
+          tags: ${{secrets.ACR_NAME}}/api-template:latest
+          push: true
