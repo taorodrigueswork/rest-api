@@ -55,4 +55,6 @@ jobs:
       working-directory: ./API/
       run: dotnet publish -c Release -p:ContainerImageName=teste/hellodockerfromdotnet7
    
-  
+    - name: Push Image
+      #run: docker push teste//hellodockerfromdotnet7 --all-tags
+      run: docker push ${{ secrets.ACR_LOGIN }}/teste/hellodockerfromdotnet7:${{ github.sha }}
