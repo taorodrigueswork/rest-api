@@ -50,6 +50,9 @@ jobs:
         login-server: ${{ secrets.ACR_LOGIN }}
         username: ${{ secrets.ACR_NAME }} 
         password: ${{ secrets.ACR_PASSWORD }}
-        
+    
+    - name: Build Image
+      working-directory: ./API/
+      run: dotnet publish -c Release -p:ContainerImageName=teste/hellodockerfromdotnet7
    
   
