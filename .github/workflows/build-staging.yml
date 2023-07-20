@@ -12,23 +12,38 @@ name: Build and push the latest build to staging
 # 2. Change the values for the REGISTRY_NAME, CLUSTER_NAME, CLUSTER_RESOURCE_GROUP and NAMESPACE environment variables (below).
 
 on:
-  push:
-    branches: [ main ]
-    
-# Environment variables available to all jobs and steps in this workflow
-env:
-  REGISTRY_NAME: my-registry-name
-  CLUSTER_NAME: my-cluster-name
-  CLUSTER_RESOURCE_GROUP: my-cluster-resource-group
-  NAMESPACE: default
-  
+  workflow_dispatch:
+
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
-    environment: dev
     steps:
-    - uses: actions/checkout@master
+    - name: Checkout
+      uses: actions/checkout@v3
     
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x
+        
+    - name: Restore dependencies
+      working-directory: ./API/
+      run: dotnet restore
+      
+    - name: Build
+      working-directory: ./API/
+      run: dotnet build --no-restore
+      
+  docker:
+    name:  Docker Build & Push
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3 
+        
     # Connect to Azure Container registry (ACR)
     - uses: azure/docker-login@v1
       with:
@@ -36,9 +51,10 @@ jobs:
         username: ${{ secrets.ACR_NAME }} 
         password: ${{ secrets.ACR_PASSWORD }}
     
-    # Container build and push to a Azure Container registry (ACR)
-    - run: |
-        docker build . -t ${{ secrets.ACR_LOGIN }}/myimage:${{ github.sha }}
-        docker push ${{ secrets.ACR_LOGIN }}/myimage:${{ github.sha }}
-    
-  
+    - name: Build Image
+      working-directory: ./API/
+      run: dotnet publish -c Release -p:ContainerImageName=teste/hellodockerfromdotnet7
+   
+    - name: Push Image
+      #run: docker push teste//hellodockerfromdotnet7 --all-tags
+      run: docker push ${{ secrets.ACR_LOGIN }}/teste/hellodockerfromdotnet7:${{ github.sha }}
