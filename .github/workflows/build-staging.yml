@@ -56,5 +56,4 @@ jobs:
       run: dotnet publish -c Release -p:ContainerImageName=${{ secrets.ACR_LOGIN }}/api-template-image
    
     - name: Push Image
-      #run: docker push teste//hellodockerfromdotnet7 --all-tags
-      run: docker push ${{ secrets.ACR_LOGIN }}/api-template-image:${{ github.sha }}
+      run: docker push ${{ secrets.ACR_LOGIN }}/api-template-image --all-tags
