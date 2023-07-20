@@ -70,7 +70,8 @@ This project has classes representing one-to-many and many-to-many relationships
 	
 ## Components
 
-### [Configuration of .NET 7 to deploy on ACR without dockerfile]([https://github.com/coverlet-coverage/coverlet](https://codewithmukesh.com/blog/built-in-container-support-for-dotnet-7/))
+### [Dockerfile, Azure Container Registry]([https://github.com/coverlet-coverage/coverlet](https://codewithmukesh.com/blog/built-in-container-support-for-dotnet-7/))
+In a project that utilizes .NET 7, there is no need to create a Dockerfile for containerization. Instead, developers can leverage the convenience of a NuGet package called *Microsoft.NET.Build.Containers*. To build and push the latest build to the staging environment using *Azure Container Registry*, all that is required is to execute the *build-staging.yml* file. (Azure Container Registry is a cloud-based container registry provided by Microsoft's Azure platform. It serves as a centralized repository for storing and managing Docker container images).
 
 ### Logging
 
