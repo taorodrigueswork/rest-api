@@ -9,6 +9,8 @@
     <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
     <PublishProfile>DefaultContainer</PublishProfile>
     <ContainerImageName>api-template-image</ContainerImageName>
+    <ContainerImageTag Condition="'$(BUILD_VERSION)' == ''">latest</ContainerImageTag>
+    <ContainerImageTag Condition="'$(BUILD_VERSION)' != ''">$(BUILD_VERSION)</ContainerImageTag>
   </PropertyGroup>
 
   <ItemGroup>
