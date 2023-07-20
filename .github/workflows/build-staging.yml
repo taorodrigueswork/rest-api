@@ -17,9 +17,9 @@ jobs:
       - name: Docker Login
         uses: docker/login-action@v1
         with:
-          registry: ${{ secrets.ACR_NAME }}
-          username: ${{ secrets.ACR_LOGIN }}
-          password: ${{ secrets.ACR_PASSWORD }}
+          registry: ${{secrets.ACR_NAME}}
+          username: ${{secrets.ACR_LOGIN}}
+          password: ${{secrets.ACR_PASSWORD}}
 
       - name: Build and push staging images
         uses: docker/build-push-action@v2
