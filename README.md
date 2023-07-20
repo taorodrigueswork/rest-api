@@ -70,6 +70,8 @@ This project has classes representing one-to-many and many-to-many relationships
 	
 ## Components
 
+### [Configuration of .NET 7 to deploy on ACR without dockerfile]([https://github.com/coverlet-coverage/coverlet](https://codewithmukesh.com/blog/built-in-container-support-for-dotnet-7/))
+
 ### Logging
 
 The logging component uses the built-in `Serilog` library. The logging level can be configured through the `appsettings.json` file. The logs are sent to Seq, but the configuration to log in an ElasticSearch sink is already in the Program.cs file.
