@@ -57,7 +57,7 @@ public class ExceptionHandlingMiddleware
                 break;
         }
 
-        var logMessage = $"""{exception}, "ErrorHandlingMiddleware" | [Method]: "HandleExceptionAsync" | Error: {exception.Message} Headers: {context.Request.Headers}. Query: {context.Request.Query}. Path: {context.Request.Path}. Body: {context.Request.Body}""";
+        var logMessage = $"""{exception}, "ErrorHandlingMiddleware" | [Method]: "HandleExceptionAsync" | Error: {exception.Message} Headers: {context.Request.Headers}. Path: {context.Request.Path}. Body: {context.Request.Body}""";
 
         _logger.LogError(logMessage);
 
