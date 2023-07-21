@@ -36,40 +36,41 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3 
       
-    #- uses: Azure/login@v1
-    #  with:
-    #    creds: ${{ secrets.AZURE_CREDENTIALS }} 
-    #    enable-AzPSSession: true
-    #    allow-no-subscriptions: true
+    - uses: Azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }} 
+        enable-AzPSSession: true
+        allow-no-subscriptions: true
         
-    #- name: Connect to Azure Container registry (ACR)
-    #  uses: azure/docker-login@v1
-    #  with:
-    #    login-server: ${{ secrets.ACR_LOGIN }}
-    #    username: ${{ secrets.ACR_NAME }} 
-    #    password: ${{ secrets.ACR_PASSWORD }}
+    - name: Connect to Azure Container registry (ACR)
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ secrets.ACR_LOGIN }}
+        username: ${{ secrets.ACR_NAME }} 
+        password: ${{ secrets.ACR_PASSWORD }}
     
-    #- uses: Azure/get-keyvault-secrets@v1
-    #  with:
-    #    keyvault: "api-template-key-vault"
-    #    secrets: 'SqlServerStaging'
-    #  id: azKeyVaultSecretAction
+    - uses: Azure/get-keyvault-secrets@v1
+      with:
+        keyvault: "api-template-key-vault"
+        secrets: 'SqlServerStaging'
+      id: azKeyVaultSecretAction
+    
     - name: Replace token for appsettings.Production.json
       uses: cschleiden/replace-tokens@v1.1
       with:
         files: '**/appsettings.json'
       env:
-        SqlServer: "teste"
+        SqlServer: ${{ steps.azKeyVaultSecretAction.outputs.SqlServerStaging }}
         
     #substitute production appsettings entries to appsettings json file
-    - name: App Settings Variable Substitution
-      uses: microsoft/variable-substitution@v1
-      with:
-        files: '**/appsettings.json'
-      env:
-        SqlServer: "teste"
-        ConnectionStrings.DefaultConnection: "teste"
-        ConnectionStrings.DefaultConnection.SqlServer: "teste"
+    #- name: App Settings Variable Substitution
+    #  uses: microsoft/variable-substitution@v1
+    #  with:
+    #    files: '**/appsettings.json'
+    #  env:
+    #    SqlServer: "teste"
+    #    ConnectionStrings.DefaultConnection: "teste"
+    #    ConnectionStrings.DefaultConnection.SqlServer: "teste"
         
     
 
