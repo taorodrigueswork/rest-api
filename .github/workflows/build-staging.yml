@@ -45,7 +45,7 @@ jobs:
     
     - name: Build Image without DockerFile using Microsoft.NET.Build.Containers
       working-directory: ./API/
-      run: dotnet publish -c Release -p:ContainerImageName=${{ secrets.ACR_LOGIN }}/api-template-image
+      run: dotnet publish --os linux --arch x64 -c Release -p:ContainerImageName=${{ secrets.ACR_LOGIN }}/api-template-image
    
     - name: Push Image
       run: docker push ${{ secrets.ACR_LOGIN }}/api-template-image --all-tags
