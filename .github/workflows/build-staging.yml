@@ -40,6 +40,7 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }} 
         enable-AzPSSession: true
+        allow-no-subscriptions: true
         
     - name: Connect to Azure Container registry (ACR)
       uses: azure/docker-login@v1
