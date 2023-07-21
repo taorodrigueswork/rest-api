@@ -1,6 +1,5 @@
 using API;
-using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
+using API.AppSettings;
 using Business;
 using Business.Interfaces;
 using Entities.DTO.Request.Day;
@@ -43,6 +42,8 @@ try
     // Register your services/dependencies 
     void ConfigureServices(IServiceCollection services)
     {
+        builder.Host.ConfigureAppSettings();
+
         builder.Services.AddControllers().AddJsonOptions(options =>
         {   // avoid circular references when returning JSON in the API
             options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
@@ -87,23 +88,8 @@ try
         builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
         builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-        var serilogUrl = builder.Configuration.GetSection("Seq")["Url"];
-        var connectionString = builder.Configuration.GetConnectionString("SqlServerLocal"); // Access the database using the local connection string is running locally
-
-        // Connect to the database using Azure Key Vault and Azure Managed Identity to retrieve the connection string
-        if (builder.Environment.IsProduction())
-        {
-            // Connect to Azure Key Vault using Azure Managed Identity
-            var keyVaultURL = builder.Configuration["AzureKeyVault:Url"]!;
-
-            builder.Configuration.AddAzureKeyVault(new Uri(keyVaultURL), new DefaultAzureCredential());
-
-            var keyVaultClient = new SecretClient(new Uri(keyVaultURL), new DefaultAzureCredential());
-
-            connectionString = Task.Run(async () => await keyVaultClient.GetSecretAsync("ConnectionStringSqlServer")).Result.Value.Value;
-
-            serilogUrl = Task.Run(async () => await keyVaultClient.GetSecretAsync("Seq--Url")).Result.Value.Value;
-        }
+        var serilogUrl = builder.Configuration.GetRequiredSection("Seq").Get<Seq>()?.Url;
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
         builder.Services.AddDbContext<ApiContext>(options =>
         {
@@ -111,9 +97,7 @@ try
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         });
 
-        // Add Serilog to the application
-        // https://www.youtube.com/watch?v=0acSdHJfk64
-        // https://dotnetintellect.com/2020/09/06/logging-with-elasticsearch-kibana-serilog-using-asp-net-core-docker/
+        // Add Serilog to the application https://www.youtube.com/watch?v=0acSdHJfk64
         builder.Host.UseSerilog(new LoggerConfiguration()
             .Enrich.FromLogContext()
             .Enrich.WithMachineName()
@@ -121,11 +105,6 @@ try
             .WriteTo.Debug()
             .WriteTo.Seq(serverUrl: serilogUrl!)
             .MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", Serilog.Events.LogEventLevel.Warning)
-            //.WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(builder.Configuration["ElasticConfiguration:Uri"]))
-            //{
-            //    IndexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name!.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}",
-            //    AutoRegisterTemplate = true
-            //})
             .Enrich.WithProperty("Environment", builder.Environment.EnvironmentName)
             .ReadFrom.Configuration(builder.Configuration)
             .CreateLogger());
