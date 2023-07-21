@@ -55,6 +55,15 @@ jobs:
     #    secrets: 'SqlServerStaging'
     #  id: azKeyVaultSecretAction
       
+    #substitute production appsettings entries to appsettings json file
+    - name: App Settings Variable Substitution
+      uses: microsoft/variable-substitution@v1
+      with:
+        files: '**/appsettings.json'
+      env:
+        ConnectionStrings.DefaultConnection: "teste"
+        ConnectionStrings.DefaultConnection.SqlServer: "teste"
+        SqlServer: "teste"
     
     - name: Replace token for appsettings.Production.json
       uses: cschleiden/replace-tokens@v1.1
