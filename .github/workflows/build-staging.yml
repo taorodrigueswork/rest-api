@@ -50,7 +50,7 @@ jobs:
     - uses: Azure/get-keyvault-secrets@v1
       with:
         keyvault: "api-template"
-        secrets: 'ConnectionStringSqlServer'
+        secrets: 'SqlServerStaging'
       id: azKeyVaultSecretAction
       
     
@@ -59,7 +59,7 @@ jobs:
       with:
         files: '["src/rest-api-template/appsettings.json"]'
       env:
-        SqlServer: ${{ steps.azKeyVaultSecretAction.outputs.ConnectionStringSqlServer }}
+        SqlServer: ${{ steps.azKeyVaultSecretAction.outputs.SqlServerStaging }}
       
     - name: Build Image without DockerFile using Microsoft.NET.Build.Containers
       working-directory: ./API/
