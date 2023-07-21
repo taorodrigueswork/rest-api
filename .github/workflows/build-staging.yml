@@ -51,7 +51,7 @@ jobs:
     
     - uses: Azure/get-keyvault-secrets@v1
       with:
-        keyvault: "api-template"
+        keyvault: "api-template-key-vault"
         secrets: 'SqlServerStaging'
       id: azKeyVaultSecretAction
       
