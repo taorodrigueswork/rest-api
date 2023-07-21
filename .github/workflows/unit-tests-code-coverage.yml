@@ -51,8 +51,8 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
           dotnet-sonarscanner begin /k:"taorodrigueswork_rest-api" /o:"taorodrigueswork" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-          dotnet build ./API
-          dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Exclude="[*]Persistence.Migrations.*" -l trx ./API
+          dotnet build ./API --configuration Debug
+          dotnet test --environment 'Development' /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Exclude="[*]Persistence.Migrations.*" -l trx ./API
           dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
       
     
