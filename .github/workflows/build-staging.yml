@@ -59,13 +59,14 @@ jobs:
     - name: Replace token for appsettings.Production.json
       uses: cschleiden/replace-tokens@v1.1
       with:
-        files: '["src/rest-api/API/appsettings.json"]'
+        files: '${{env.DOTNET_ROOT}}/rest-api/appsettings.json'
       env:
         SqlServer: "teste"
-      
-    - name: Build Image without DockerFile using Microsoft.NET.Build.Containers
-      working-directory: ./API/
-      run: dotnet publish --os linux --arch x64 -c Release -p:ContainerImageName=${{ secrets.ACR_LOGIN }}/api-template-image
+ 
+    
+    #- name: Build Image without DockerFile using Microsoft.NET.Build.Containers
+    #  working-directory: ./API/
+    #  run: dotnet publish --os linux --arch x64 -c Release -p:ContainerImageName=${{ secrets.ACR_LOGIN }}/api-template-image
    
-    - name: Push Image
-      run: docker push ${{ secrets.ACR_LOGIN }}/api-template-image --all-tags
+    #- name: Push Image
+    #  run: docker push ${{ secrets.ACR_LOGIN }}/api-template-image --all-tags
