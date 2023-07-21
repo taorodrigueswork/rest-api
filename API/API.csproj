@@ -5,20 +5,17 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>31bc984b-7680-4c92-a850-6648ff9c6b4c</UserSecretsId>
-    <!--
-    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+    <!---->
     <PublishProfile>DefaultContainer</PublishProfile>
     <ContainerImageName>api-template-image</ContainerImageName>
     <ContainerImageTag Condition="'$(BUILD_VERSION)' == ''">latest</ContainerImageTag>
-    <ContainerImageTag Condition="'$(BUILD_VERSION)' != ''">$(BUILD_VERSION)</ContainerImageTag>-->
+    <ContainerImageTag Condition="'$(BUILD_VERSION)' != ''">$(BUILD_VERSION)</ContainerImageTag>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-    <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.2" />
     <PackageReference Include="Azure.Identity" Version="1.9.0" />
-    <PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.8" />
