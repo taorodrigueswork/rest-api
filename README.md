@@ -1,4 +1,4 @@
-[![Build and Test](https://github.com/taorodrigueswork/rest-api/actions/workflows/dotnet.yml/badge.svg?branch=main)](https://github.com/taorodrigueswork/rest-api/actions/workflows/dotnet.yml)
+[![Run Unit Test and Get Code Coverage](https://github.com/taorodrigueswork/rest-api/actions/workflows/unit-tests-code-coverage.yml/badge.svg)](https://github.com/taorodrigueswork/rest-api/actions/workflows/unit-tests-code-coverage.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=taorodrigueswork_rest-api&metric=alert_status)](https://sonarcloud.io/dashboard?id=taorodrigueswork_rest-api)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=taorodrigueswork_rest-api&metric=coverage)](https://sonarcloud.io/dashboard?id=taorodrigueswork_rest-api)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=taorodrigueswork_rest-api&metric=bugs)](https://sonarcloud.io/dashboard?id=taorodrigueswork_rest-api)
