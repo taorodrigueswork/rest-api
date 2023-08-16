@@ -1,84 +1,72 @@
 name: Build and push the latest build to staging
 
 # This workflow will build a docker container, publish it to Azure Container Registry, and deploy it to Azure Kubernetes Service.
-#
+# Before running the workflow, you need to set up the following GitHub secrets:
+# AZURE_CREDENTIALS: Azure service principal credentials to log in to Azure. This secret should contain a JSON object with the necessary credentials.
+# ACR_LOGIN: The login server URL of your Azure Container Registry (ACR).
+# ACR_NAME: The username used to authenticate with the Azure Container Registry (ACR).
+# ACR_PASSWORD: The password used to authenticate with the Azure Container Registry (ACR).
+# Make sure to create these secrets in your GitHub repository and populate them with the correct values before triggering the workflow. These secrets are required for the successful execution of the workflow.
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:  # Manual triggering of the workflow.
 
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Use the latest version of Ubuntu as the runner for this job.
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+    - name: Checkout  # Step to checkout the code repository.
+      uses: actions/checkout@v3 
         
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+    - name: Setup .NET  # Step to set up .NET Core on the runner.
+      uses: actions/setup-dotnet@v3 
       with:
-        dotnet-version: 7.0.x
+        dotnet-version: 7.0.x  # Specify the desired version of .NET Core.
         
-    - name: Restore dependencies
-      working-directory: ./API/
-      run: dotnet restore
+    - name: Restore dependencies  # Step to restore NuGet dependencies.
+      working-directory: ./API/  # Change the working directory to ./API/.
+      run: dotnet restore  # Use dotnet CLI to restore the NuGet packages.
       
-    - name: Build
-      working-directory: ./API/
-      run: dotnet build --no-restore
+    - name: Build  # Step to build the .NET Core project.
+      working-directory: ./API/  # Change the working directory to ./API/.
+      run: dotnet build --no-restore  # Use dotnet CLI to build the project without restoring again.
       
   docker:
     name:  Docker Build & Push to ACR
     runs-on: ubuntu-latest
     needs:
-      - build
+      - build  # This job depends on the "build" job, meaning "build" job will run before this one.
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3 
-      
-    - uses: Azure/login@v1
+    - uses: Azure/login@v1  # Step to log in to Azure using the provided credentials.
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }} 
+        creds: ${{ secrets.AZURE_CREDENTIALS }}  # Access Azure credentials from GitHub secrets.
         enable-AzPSSession: true
         allow-no-subscriptions: true
         
-    - name: Connect to Azure Container registry (ACR)
+    - name: Connect to Azure Container registry (ACR)  # Step to log in to the Azure Container Registry (ACR).
       uses: azure/docker-login@v1
       with:
-        login-server: ${{ secrets.ACR_LOGIN }}
-        username: ${{ secrets.ACR_NAME }} 
-        password: ${{ secrets.ACR_PASSWORD }}
+        login-server: ${{ secrets.ACR_LOGIN }}  # Access ACR login URL from GitHub secrets.
+        username: ${{ secrets.ACR_NAME }}  # Access ACR username from GitHub secrets.
+        password: ${{ secrets.ACR_PASSWORD }}  # Access ACR password from GitHub secrets.
     
-    - uses: Azure/get-keyvault-secrets@v1
+    - uses: Azure/get-keyvault-secrets@v1  # Step to get secrets from Azure Key Vault.
       with:
-        keyvault: "api-template-key-vault"
-        secrets: 'SqlServerStaging'
-      id: azKeyVaultSecretAction
+        keyvault: "api-template-key-vault"  # Specify the Azure Key Vault name.
+        secrets: 'SqlServerStaging'  # Specify the secret name to retrieve.
+      id: azKeyVaultSecretAction  # Assign an ID to this step for later reference.
     
-    - name: Replace token for appsettings.Production.json
+    - name: Replace token for appsettings.json  # Step to replace tokens in appsettings.json with secret values.
       uses: cschleiden/replace-tokens@v1.1
       with:
-        files: '**/appsettings.json'
+        files: '**/appsettings.json'  # Use appsettings.json files to replace tokens.
       env:
-        SqlServer: ${{ steps.azKeyVaultSecretAction.outputs.SqlServerStaging }}
+        SqlServer: ${{ steps.azKeyVaultSecretAction.outputs.SqlServerStaging }}  # Use the retrieved secret value as an environment variable.
         
-    #substitute production appsettings entries to appsettings json file
-    #- name: App Settings Variable Substitution
-    #  uses: microsoft/variable-substitution@v1
-    #  with:
-    #    files: '**/appsettings.json'
-    #  env:
-    #    SqlServer: "teste"
-    #    ConnectionStrings.DefaultConnection: "teste"
-    #    ConnectionStrings.DefaultConnection.SqlServer: "teste"
-        
-    
-
- 
-    
-    - name: Build Image without DockerFile using Microsoft.NET.Build.Containers
-      working-directory: ./API/
-      run: dotnet publish --os linux --arch x64 -c Release -p:ContainerImageName=${{ secrets.ACR_LOGIN }}/api-template-image
+    - name: Build Image without DockerFile using Microsoft.NET.Build.Containers  # Step to build the Docker image using Microsoft.NET.Build.Containers.
+      working-directory: ./API/  # Change the working directory to ./API/.
+      run: dotnet publish --os linux --arch x64 -c Release -p:ContainerImageName=${{ secrets.ACR_LOGIN }}/api-template-image  # Use dotnet CLI to publish the project as a Docker image.
    
-    - name: Push Image
-      run: docker push ${{ secrets.ACR_LOGIN }}/api-template-image --all-tags
+    - name: Push Image  # Step to push the Docker image to the Azure Container Registry (ACR).
+      run: docker push ${{ secrets.ACR_LOGIN }}/api-template-image --all-tags  # Use Docker CLI to push the image to ACR.
