@@ -61,13 +61,7 @@ This project has classes representing one-to-many and many-to-many relationships
   - `Migrations`: Contain all migration files defining the changes to the model that should be applied to the database. NOTE: We are using SQL Server for production and Development and SQLite to run Integration Tests. In order to run the same migrations for different providers, we need to edit the migration and create a conditional to verify if the provider is SQL Server or SQLite. The difference between them is the AutoIncrement syntax for Primary Keys.
   - `Repository`: This folder contains the repository classes that handle database operations.
   - `IRepository`: This folder contains the interfaces for the repository classes.
-- `Tests`: 
-  - `Entities.Test`: This folder contains the entity tests using MSTest.
-	- `MappingProfileTests`: It tests if all the properties are mapped correctly. Not a single property should be ignored. Helps to avoid mistakes when mapping entities and DTOs.
-  - `Business.Test`: This folder contains the business tests using MSTest.
-  - `ExceptionHandlingMiddlewareTests`: 
-  - `ValidationFilterAttributeTests`: 
-  - `Persistence`: 
+- `Tests`: This folder contains the business tests using NUnit, Mock and AutoFixture.
 	
 ## Components
 
