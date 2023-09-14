@@ -14,7 +14,17 @@
 
 This is a template for building REST APIs using .NET 7 and Entity Framework Core 7. It is a monolith using multilayer architecture and uses some common libraries and configurations very used in the .Net community.
 
-To get started, you can just clone this repository and run the application using Visual Studio 2022 or the .NET CLI. 
+To get started, you need to:
+- clone this repository
+- install SQL Server on your machine
+- replace ConnectionString to this configuration in your appsettings.json:
+
+```
+"ConnectionStrings": {
+  "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=ApiTemplate;Trusted_Connection=True;"
+}
+```
+- run the application using Visual Studio 2022 or the .NET CLI 
 
 ## Technologies
 
@@ -84,9 +94,3 @@ DTOs are used to prevent exposing entity models directly to the API consumers. I
 ### Azure Key Vault
 
 Azure Key Vault is a cloud service that can be used to store secrets and configuration data for .NET or ASP.NET Core applications. Azure Key Vault securely stores secret values and allows access to those values without any explicit code change to both applications hosted in Azure and users based on their Azure credentials.
-
-## Future Implementations
-
-- OAuth
-- AKS
-- HATEOAS
