@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Text.Json;
 
-namespace ExceptionHandling.CustomMiddleware;
+namespace API.CustomMiddlewares;
 
 /// <summary>
 /// For more information: https://code-maze.com/global-error-handling-aspnetcore/

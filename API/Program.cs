@@ -6,7 +6,6 @@ using Entities.DTO.Request.Day;
 using Entities.DTO.Request.Person;
 using Entities.DTO.Request.Schedule;
 using Entities.Entity;
-using ExceptionHandling.CustomMiddleware;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Versioning;
@@ -19,6 +18,7 @@ using Persistence.Repository.GenericRepository;
 using Serilog;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
+using API.CustomMiddlewares;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
